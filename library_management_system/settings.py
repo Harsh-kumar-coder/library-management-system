@@ -3,19 +3,27 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# =====================
 # SECURITY
+# =====================
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-fallback-key")
+
 DEBUG = False
 
-# ALLOWED HOSTS (FINAL FIX)
-ALLOWED_HOSTS = [".onrender.com"]
+ALLOWED_HOSTS = [
+    "library-management-system-mxnn.onrender.com",
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1"
+]
 
-# CSRF (IMPORTANT for login/forms)
 CSRF_TRUSTED_ORIGINS = [
     "https://library-management-system-mxnn.onrender.com"
 ]
 
-# APPLICATIONS
+# =====================
+# APPS
+# =====================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,9 +35,12 @@ INSTALLED_APPS = [
     'books',
 ]
 
+# =====================
 # MIDDLEWARE
+# =====================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files (important)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -40,6 +51,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'library_management_system.urls'
 
+# =====================
+# TEMPLATES
+# =====================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -57,7 +71,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'library_management_system.wsgi.application'
 
-# DATABASE
+# =====================
+# DATABASE (SQLite)
+# =====================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -65,7 +81,9 @@ DATABASES = {
     }
 }
 
+# =====================
 # PASSWORD VALIDATION
+# =====================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -73,33 +91,49 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# =====================
 # INTERNATIONALIZATION
+# =====================
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# STATIC FILES
+# =====================
+# STATIC FILES (IMPORTANT FOR RENDER)
+# =====================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# MEDIA FILES
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# =====================
+# MEDIA
+# =====================
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# LOGIN SYSTEM
+# =====================
+# LOGIN SETTINGS
+# =====================
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = 'login'
 
+# =====================
 # EMAIL
+# =====================
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'admin@college.com'
 
+# =====================
 # SESSION
+# =====================
 SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
 
-# DEFAULT AUTO FIELD
+# =====================
+# DEFAULT
+# =====================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
