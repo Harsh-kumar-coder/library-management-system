@@ -7,7 +7,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-fallback-key")
 DEBUG = False
 
-ALLOWED_HOSTS = [".onrender.com"]
+ALLOWED_HOSTS = [
+    "library-management-system-mxnn.onrender.com",
+    ".onrender.com"
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://library-management-system-mxnn.onrender.com"
