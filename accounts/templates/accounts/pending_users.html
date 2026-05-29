@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-4">
+
+    <!-- HEADING -->
+    <div class="text-center mb-4">
+
+        <h2 class="text-white fw-bold">
+            👥 Pending Users
+        </h2>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="card shadow-lg border-0 p-4" style="border-radius:20px;">
+
+        <!-- SEARCH -->
+        <div class="position-relative mb-3">
+
+            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" style="z-index:10;">
+                🔍
+            </span>
+
+            <input type="text" id="searchUser" class="form-control ps-5" placeholder="Search username, email or role..."
+                style="
+                        background: rgba(255,255,255,0.9);
+                        border: 1px solid rgba(0,0,0,0.1);
+                        border-radius: 12px;
+                        color: #000;
+                        height: 42px;
+                   ">
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle" id="usersTable">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Username</th>
+
+                        <th>Email</th>
+
+                        <th>Role</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for user in users %}
+
+                    <tr>
+
+                        <td>
+                            {{ user.username }}
+                        </td>
+
+                        <td>
+                            {{ user.email }}
+                        </td>
+
+                        <td>
+
+                            {% if user.is_superuser %}
+
+                            <span class="badge bg-danger">
+                                Admin
+                            </span>
+
+                            {% elif user.is_staff %}
+
+                            <span class="badge bg-primary">
+                                Staff
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-success">
+                                Student
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'approve_user' user.id %}" class="btn btn-success btn-sm">
+
+                                Approve
+
+                            </a>
+
+                            <a href="{% url 'reject_user' user.id %}" class="btn btn-danger btn-sm">
+
+                                Reject
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="4" class="text-center">
+
+                            No Pending Users
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    #searchUser::placeholder {
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    #searchUser:focus {
+        outline: none;
+        border-color: #764ba2;
+        box-shadow: 0 0 8px rgba(118, 75, 162, 0.3);
+    }
+</style>
+
+<!-- SEARCH SCRIPT -->
+<script>
+
+    document.getElementById("searchUser").addEventListener("keyup", function () {
+
+        let value = this.value.toLowerCase();
+
+        document.querySelectorAll("#usersTable tbody tr").forEach(row => {
+
+            row.style.display =
+                row.innerText.toLowerCase().includes(value)
+                    ? ""
+                    : "none";
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}

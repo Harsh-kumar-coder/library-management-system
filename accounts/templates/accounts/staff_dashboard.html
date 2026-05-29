@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-4">
+
+    <!-- HEADER -->
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold text-white display-6">
+            Staff Dashboard
+        </h2>
+
+        <p class="text-light opacity-75">
+            Welcome {{ request.user.username }}
+        </p>
+
+    </div>
+
+    <!-- ACTION CARDS -->
+    <div class="row g-4">
+
+        <!-- MANAGE BOOKS -->
+        <div class="col-md-3">
+
+            <a href="{% url 'book_list' %}" class="text-decoration-none">
+
+                <div class="glass-card p-4 text-center h-100">
+
+                    <h5 class="text-primary">
+                        📚 Manage Books
+                    </h5>
+
+                    <small class="text-light opacity-75">
+                        View, add and edit books
+                    </small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- ISSUE BOOK -->
+        <div class="col-md-3">
+
+            <a href="{% url 'issue_book' %}" class="text-decoration-none">
+
+                <div class="glass-card p-4 text-center h-100">
+
+                    <h5 class="text-success">
+                        📖 Issue Book
+                    </h5>
+
+                    <small class="text-light opacity-75">
+                        Assign books to students
+                    </small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- RETURN BOOK -->
+        <div class="col-md-3">
+
+            <a href="{% url 'return_book' %}" class="text-decoration-none">
+
+                <div class="glass-card p-4 text-center h-100">
+
+                    <h5 class="text-danger">
+                        🔄 Return Books
+                    </h5>
+
+                    <small class="text-light opacity-75">
+                        Manage returned books
+                    </small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- BOOK REQUESTS -->
+        <div class="col-md-3">
+
+            <a href="{% url 'view_requests' %}" class="text-decoration-none">
+
+                <div class="glass-card p-4 text-center h-100">
+
+                    <h5 class="text-warning">
+                        📩 Book Requests
+                    </h5>
+
+                    <small class="text-light opacity-75">
+                        Approve student requests
+                    </small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

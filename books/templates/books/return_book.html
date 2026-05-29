@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-5">
+
+    <!-- HEADING -->
+    <div class="text-center mb-4">
+        <h2 class="text-white fw-bold">🔄 Return Books</h2>
+    </div>
+
+    <!-- CARD -->
+    <div class="card shadow-lg border-0 p-4" style="border-radius:20px;">
+
+        <!-- SEARCH -->
+        <div class="position-relative mb-3">
+
+            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                🔍
+            </span>
+
+            <input type="text" id="returnSearch" class="form-control ps-5"
+                placeholder="Search student, book or status..." style="
+                        background: rgba(255,255,255,0.9);
+                        border: 1px solid rgba(0,0,0,0.1);
+                        border-radius: 12px;
+                        color: #000;
+                        height: 42px;
+                   ">
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle" id="returnTable">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Student</th>
+                        <th>Book</th>
+                        <th>Issue Date</th>
+                        <th>Return Date</th>
+                        <th>Fine</th>
+                        <th>Status</th>
+
+                        {% if request.user.is_superuser or request.user.is_staff %}
+                        <th>Action</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for issue in issued_books %}
+
+                    <tr>
+                        <td>{{ issue.student.username }}</td>
+                        <td>{{ issue.book.title }}</td>
+                        <td>{{ issue.issue_date }}</td>
+                        <td>{{ issue.return_date }}</td>
+
+                        <td>
+                            {% if issue.fine > 0 %}
+                            <span class="badge bg-danger">₹{{ issue.fine }}</span>
+                            {% else %}
+                            <span class="badge bg-success">No Fine</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if issue.returned %}
+                            <span class="badge bg-success">Returned</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark">Issued</span>
+                            {% endif %}
+                        </td>
+
+                        {% if request.user.is_superuser or request.user.is_staff %}
+                        <td>
+                            {% if not issue.returned %}
+                            <a href="{% url 'return_book_action' issue.id %}" class="btn btn-danger btn-sm">
+                                Return
+                            </a>
+                            {% else %}
+                            <button class="btn btn-success btn-sm" disabled>
+                                Returned
+                            </button>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            No Issued Books
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SEARCH SCRIPT -->
+<script>
+    document.getElementById("returnSearch").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+
+        document.querySelectorAll("#returnTable tbody tr").forEach(row => {
+            row.style.display =
+                row.innerText.toLowerCase().includes(value) ? "" : "none";
+        });
+    });
+</script>
+
+{% endblock %}

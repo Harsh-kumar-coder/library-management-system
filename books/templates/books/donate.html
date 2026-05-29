@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Donate Us{% endblock %}
+
+{% block content %}
+
+{% include 'includes/public_navbar.html' %}
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="text-center mb-4">
+
+        <h2 class="fw-bold text-warning">
+            💖 Support Library
+        </h2>
+
+        <p class="text-light opacity-75">
+            Your small contribution helps students learn better
+        </p>
+
+    </div>
+
+    <div class="row justify-content-center g-4">
+
+        <!-- DONATION FORM -->
+        <div class="col-lg-6">
+
+            <div class="glass-card p-4">
+
+                <h4 class="text-white text-center mb-4">
+                    Make a Donation
+                </h4>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-2">
+                        <label class="form-label text-light">Your Name</label>
+                        <input type="text" name="name" class="form-control form-control-sm"
+                            placeholder="Enter your name">
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label text-light">Amount</label>
+                        <input type="number" name="amount" class="form-control form-control-sm"
+                            placeholder="Enter amount" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-light">Message</label>
+                        <textarea name="message" rows="3" class="form-control form-control-sm"
+                            placeholder="Optional message"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 fw-bold btn-sm">
+                        Submit Donation
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- QR SECTION -->
+        <div class="col-lg-4">
+
+            <div class="glass-card p-4 text-center h-100">
+
+                <h5 class="text-warning mb-3">
+                    📱 Scan & Pay
+                </h5>
+
+                <img src="{% static 'images/qr.png' %}" class="img-fluid mb-3"
+                    style="max-width:220px; border-radius:12px;">
+
+                <p class="text-light mb-1">
+                    UPI Payment
+                </p>
+
+                <h6 class="text-white">
+                    kumarharsh09374-1@oksbi
+                </h6>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+About Us
+{% endblock %}
+
+{% block content %}
+
+{% include 'includes/public_navbar.html' %}
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold text-warning">
+            About Our Project
+        </h1>
+
+        <p class="text-light fs-5 opacity-75">
+            We are a team of 4 students building a Library Management System
+        </p>
+
+    </div>
+
+    <!-- TEAM -->
+    <div class="row g-4">
+
+        <!-- MEMBER 1 -->
+        <div class="col-md-3">
+
+            <div class="team-card text-center p-4 h-100">
+
+                <img src="{% static 'images/user1.jpg' %}" class="team-img mb-3"
+                    style="object-fit:cover; object-position:top;">
+
+                <h5 class="fw-bold">Nikhil Kumar</h5>
+                <span class="role-badge">Full Stack Developer</span>
+
+                <p class="text-muted small">
+                    Authentication system, dashboard & UI design.
+                </p>
+
+                <a href="https://github.com/" target="_blank" class="btn btn-dark btn-sm w-100 mt-2">
+                    View Profile
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- MEMBER 2 -->
+        <div class="col-md-3">
+
+            <div class="team-card text-center p-4 h-100">
+
+                <img src="{% static 'images/user2.jpg' %}" class="team-img mb-3"
+                    style="object-fit:cover; object-position:top;">
+
+                <h5 class="fw-bold">Harsh Kumar</h5>
+                <span class="role-badge">Backend Developer</span>
+
+                <p class="text-muted small">
+                    Database structure & backend logic.
+                </p>
+
+                <a href="https://github.com/Harsh-kumar-coder/" target="_blank" class="btn btn-dark btn-sm w-100 mt-2">
+                    View Profile
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- MEMBER 3 -->
+        <div class="col-md-3">
+
+            <div class="team-card text-center p-4 h-100">
+
+                <img src="{% static 'images/user3.jpg' %}" class="team-img mb-3">
+
+                <h5 class="fw-bold">Abhishek Kumar</h5>
+                <span class="role-badge">Frontend Designer</span>
+
+                <p class="text-muted small">
+                    Responsive UI, forms & animations.
+                </p>
+
+                <a href="https://www.instagram.com/its_abhishek__.singh" target="_blank"
+                    class="btn btn-dark btn-sm w-100 mt-2">
+                    View Profile
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- MEMBER 4 -->
+        <div class="col-md-3">
+
+            <div class="team-card text-center p-4 h-100">
+
+                <img src="{% static 'images/user4.jpg' %}" class="team-img mb-3">
+
+                <h5 class="fw-bold">Gaurav Kumar</h5>
+                <span class="role-badge">Testing & Docs</span>
+
+                <p class="text-muted small">
+                    Testing, bug fixing & documentation.
+                </p>
+
+                <a href="https://github.com/" target="_blank" class="btn btn-dark btn-sm w-100 mt-2">
+                    View Profile
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}

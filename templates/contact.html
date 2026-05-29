@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Contact Us
+{% endblock %}
+
+{% block content %}
+
+{% include 'includes/public_navbar.html' %}
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="text-center mb-4">
+
+        <h2 class="fw-bold text-warning">
+            Contact Us
+        </h2>
+
+        <p class="text-light opacity-75">
+            We are here to help you anytime
+        </p>
+
+    </div>
+
+    <div class="row justify-content-center align-items-center g-4">
+
+        <!-- LEFT: FORM -->
+        <div class="col-lg-6">
+
+            <div class="glass-card p-4">
+
+                <h4 class="text-white text-center mb-4">
+                    Send Message
+                </h4>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-2">
+                        <label class="form-label text-light">Full Name</label>
+                        <input type="text" class="form-control form-control-sm" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label text-light">Email</label>
+                        <input type="email" class="form-control form-control-sm" placeholder="Enter your email"
+                            required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label text-light">Subject</label>
+                        <input type="text" class="form-control form-control-sm" placeholder="Enter subject" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-light">Message</label>
+                        <textarea class="form-control form-control-sm" rows="3" placeholder="Write your message..."
+                            required></textarea>
+                    </div>
+
+                    <button class="btn btn-warning w-100 fw-bold btn-sm">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT: IMAGE -->
+        <div class="col-lg-5 text-center">
+
+            <img src="{% static 'images/contact_team.png' %}" class="img-fluid"
+                style="max-height:420px; border-radius:15px;">
+
+            <h5 class="text-light mt-3">
+                Team Support & Library Help
+            </h5>
+
+            <p class="text-light opacity-75">
+                Our team is always ready to assist students and staff.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}

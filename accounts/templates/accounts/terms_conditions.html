@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms & Conditions{% endblock %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-5">
+
+    <div class="card shadow p-4" style="border-radius:12px;">
+
+        <h2 class="text-center mb-4">Terms & Conditions</h2>
+
+        <p>
+            Welcome to our Library Management System. By using this website, you agree to follow the terms and conditions mentioned below.
+        </p>
+
+        <h5>1. User Responsibility</h5>
+        <p>
+            Users must provide accurate information during registration and are responsible for maintaining account security.
+        </p>
+
+        <h5>2. Proper Use</h5>
+        <p>
+            This system should only be used for educational and library-related purposes. Any misuse is strictly prohibited.
+        </p>
+
+        <h5>3. Book Usage</h5>
+        <p>
+            Borrowed books must be returned within the given time period. Late returns may result in penalties.
+        </p>
+
+        <h5>4. Privacy</h5>
+        <p>
+            Your personal data is protected and will not be shared with third parties without permission.
+        </p>
+
+        <h5>5. Changes</h5>
+        <p>
+            We may update these terms at any time. Users are advised to check this page regularly.
+        </p>
+
+        <hr>
+
+        <p class="text-muted text-center">
+            Last updated: May 2026
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

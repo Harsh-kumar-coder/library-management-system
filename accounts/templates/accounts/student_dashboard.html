@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-5">
+
+    <!-- HEADER -->
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold text-white display-6">
+            Student Dashboard
+        </h2>
+
+        <p class="text-light opacity-75">
+            Welcome {{ request.user.username }}
+        </p>
+
+    </div>
+
+    <!-- ACTION CARDS -->
+    <div class="row g-4 justify-content-center">
+
+        <!-- VIEW BOOKS -->
+        <div class="col-md-4">
+
+            <a href="{% url 'book_list' %}" class="text-decoration-none">
+
+                <div class="glass-card p-4 text-center h-100">
+
+                    <h4 class="fw-bold text-primary">
+                        📚 View Books
+                    </h4>
+
+                    <p class="text-light opacity-75 mt-2">
+                        Browse all available books
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- REQUEST BOOK -->
+        <div class="col-md-4">
+
+            <a href="{% url 'request_book' %}" class="text-decoration-none">
+
+                <div class="glass-card p-4 text-center h-100">
+
+                    <h4 class="fw-bold text-warning">
+                        📖 Request Book
+                    </h4>
+
+                    <p class="text-light opacity-75 mt-2">
+                        Send request for books
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- RETURN STATUS -->
+        <div class="col-md-4">
+
+            <a href="{% url 'return_book' %}" class="text-decoration-none">
+
+                <div class="glass-card p-4 text-center h-100">
+
+                    <h4 class="fw-bold text-success">
+                        🔄 Return Status
+                    </h4>
+
+                    <p class="text-light opacity-75 mt-2">
+                        Check issued & returned books
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

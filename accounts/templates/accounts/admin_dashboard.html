@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-4">
+
+    <!-- HEADER -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-white display-6">Admin Dashboard</h2>
+        <p class="text-light opacity-75">Manage users, books and library activities</p>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Total Users</h6>
+                <h2 class="text-primary fw-bold">{{ users_count }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Total Books</h6>
+                <h2 class="text-success fw-bold">{{ books_count }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Pending Users</h6>
+                <h2 class="text-warning fw-bold">{{ pending_users|length }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Book Requests</h6>
+                <h2 class="text-info fw-bold">{{ pending_requests|length }}</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ACTION CARDS -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-3">
+            <a href="{% url 'book_list' %}" class="text-decoration-none">
+                <div class="glass-card p-4 text-center h-100">
+                    <h5 class="text-primary">📘 Books</h5>
+                    <small class="text-light opacity-75">Manage library books</small>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{% url 'issue_book' %}" class="text-decoration-none">
+                <div class="glass-card p-4 text-center h-100">
+                    <h5 class="text-success">📚 Issue</h5>
+                    <small class="text-light opacity-75">Assign books</small>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{% url 'return_book' %}" class="text-decoration-none">
+                <div class="glass-card p-4 text-center h-100">
+                    <h5 class="text-danger">🔄 Return</h5>
+                    <small class="text-light opacity-75">Manage returns</small>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{% url 'view_requests' %}" class="text-decoration-none">
+                <div class="glass-card p-4 text-center h-100">
+                    <h5 class="text-warning">📖 Requests</h5>
+                    <small class="text-light opacity-75">Approve requests</small>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- TABLE SECTION -->
+    <div class="row g-4">
+
+        <!-- USERS -->
+        <div class="col-md-6">
+
+            <div class="glass-card p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-white">Pending Users</h5>
+                    <a href="{% url 'pending_users' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+
+                <input type="text" id="userSearch" class="form-control mb-3" placeholder="Search users...">
+
+                <div class="table-responsive">
+
+                    <table class="table table-dark table-hover align-middle" id="usersTable">
+
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for user in pending_users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.is_superuser %}Admin
+                                    {% elif user.is_staff %}Staff
+                                    {% else %}Student{% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'approve_user' user.id %}"
+                                        class="btn btn-success btn-sm">Approve</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BOOK REQUESTS -->
+        <div class="col-md-6">
+
+            <div class="glass-card p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-white">Book Requests</h5>
+                    <a href="{% url 'view_requests' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+
+                <input type="text" id="bookSearch" class="form-control mb-3" placeholder="Search requests...">
+
+                <div class="table-responsive">
+
+                    <table class="table table-dark table-hover align-middle" id="booksTable">
+
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Book</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for req in pending_requests %}
+                            <tr>
+                                <td>{{ req.student.username }}</td>
+                                <td>{{ req.book.title }}</td>
+                                <td>
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SEARCH SCRIPT -->
+<script>
+    document.getElementById("userSearch").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        document.querySelectorAll("#usersTable tbody tr").forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+        });
+    });
+
+    document.getElementById("bookSearch").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        document.querySelectorAll("#booksTable tbody tr").forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+        });
+    });
+</script>
+
+{% endblock %}

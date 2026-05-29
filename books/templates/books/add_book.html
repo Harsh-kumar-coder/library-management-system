@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-5">
+
+    <div class="card shadow-lg border-0 p-4 mx-auto" style="max-width:600px;border-radius:20px;">
+
+        <h2 class="text-center mb-4">
+            Add Book
+        </h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label>Title</label>
+
+                <input type="text" name="title" class="form-control" required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Author</label>
+
+                <input type="text" name="author" class="form-control" required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>ISBN</label>
+
+                <input type="text" name="isbn" class="form-control" required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Quantity</label>
+
+                <input type="number" name="quantity" class="form-control" required>
+
+            </div>
+
+            <button class="btn btn-success w-100">
+                Add Book
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

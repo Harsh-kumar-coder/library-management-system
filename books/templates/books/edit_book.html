@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-5">
+
+    <div class="card shadow-lg border-0 p-4 mx-auto" style="max-width:600px;border-radius:20px;">
+
+        <h2 class="text-center mb-4">
+            Edit Book
+        </h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label>Title</label>
+
+                <input type="text" name="title" value="{{ book.title }}" class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Author</label>
+
+                <input type="text" name="author" value="{{ book.author }}" class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>ISBN</label>
+
+                <input type="text" name="isbn" value="{{ book.isbn }}" class="form-control">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Quantity</label>
+
+                <input type="number" name="quantity" value="{{ book.quantity }}" class="form-control">
+
+            </div>
+
+            <button class="btn btn-primary w-100">
+                Update Book
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

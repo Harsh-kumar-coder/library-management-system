@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% include 'includes/public_navbar.html' %}
+
+<section class="hero-section">
+
+    <div class="container">
+
+        <div class="row align-items-center min-vh-100 g-5">
+
+            <!-- LEFT SIDE -->
+            <div class="col-lg-6 text-white">
+
+                <span class="hero-badge">
+                    ✨ Smart Digital Library Platform
+                </span>
+
+                <h1 class="hero-title">
+
+                    <span class="title-white">Library</span><br>
+
+                    <span class="title-blue">Management</span><br>
+
+                    <span class="title-white">System</span>
+
+                </h1>
+
+                <p class="hero-desc">
+
+                    A modern smart platform to manage books, students,
+                    staff and complete library activities with beautiful
+                    dashboards and smooth experience.
+
+                </p>
+
+                <div class="d-flex gap-3 flex-wrap">
+
+                    <a href="{% url 'login' %}" class="hero-btn">
+                        🚀 Get Started
+                    </a>
+
+                    <a href="{% url 'about' %}" class="hero-outline-btn">
+                        📚 Explore
+                    </a>
+
+                </div>
+
+                <!-- STATS -->
+
+                <div class="hero-stats">
+
+                    <div>
+                        <h3 class="text-info">100+</h3>
+                        <small>Books Managed</small>
+                    </div>
+
+                    <div>
+                        <h3 class="text-warning">50+</h3>
+                        <small>Students</small>
+                    </div>
+
+                    <div>
+                        <h3 class="text-success">99%</h3>
+                        <small>Fast Management</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+
+            <div class="col-lg-6">
+
+                <div class="hero-image-wrapper">
+
+                    <!-- MAIN IMAGE -->
+
+                    <img src="{% static 'images/h1.jpg' %}" class="hero-main-image" alt="Library">
+
+                    <!-- TEAM IMAGE -->
+
+                    <img src="{% static 'images/contact_team.png' %}" class="hero-floating-library" alt="Team">
+
+                    <div class="hero-glow"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Register{% endblock %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height:95vh;">
+
+    <div class="card shadow-lg border-0 p-4 mx-auto" style="
+         max-width:520px;
+         width:100%;
+         border-radius:20px;
+         backdrop-filter: blur(10px);
+         background: rgba(255,255,255,0.15);
+         ">
+
+        <div class="text-center mb-4">
+
+            <h2 class="fw-bold text-white">
+                Student Registration
+            </h2>
+
+            <p class="text-light">
+                Create your student account
+            </p>
+
+        </div>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <!-- Username -->
+
+            <div class="mb-3 input-group">
+
+                <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                </span>
+
+                <input type="text" name="username" class="form-control" placeholder="Enter Username" required>
+
+            </div>
+
+            <!-- Roll Number -->
+
+            <div class="mb-3 input-group">
+
+                <span class="input-group-text">
+                    <i class="fa fa-id-card"></i>
+                </span>
+
+                <input type="text" name="roll_number" class="form-control" placeholder="Enter Roll Number" required>
+
+            </div>
+
+            <!-- Email -->
+
+            <div class="mb-3 input-group">
+
+                <span class="input-group-text">
+                    <i class="fa fa-envelope"></i>
+                </span>
+
+                <input type="email" name="email" class="form-control" placeholder="Enter Email" required>
+
+            </div>
+
+            <!-- Password -->
+
+            <div class="mb-3 input-group">
+
+                <span class="input-group-text">
+                    <i class="fa fa-lock"></i>
+                </span>
+
+                <input type="password" id="studentPass" name="password" class="form-control"
+                    placeholder="Enter Password" required>
+
+                <span class="input-group-text" onclick="togglePass('studentPass')" style="cursor:pointer;">
+
+                    👁
+
+                </span>
+
+            </div>
+
+            <!-- Confirm Password -->
+
+            <div class="mb-3 input-group">
+
+                <span class="input-group-text">
+                    <i class="fa fa-lock"></i>
+                </span>
+
+                <input type="password" id="studentConfirmPass" name="confirm_password" class="form-control"
+                    placeholder="Confirm Password" required>
+
+            </div>
+
+            <!-- Terms -->
+
+            <div class="form-check mb-3">
+
+                <input class="form-check-input" type="checkbox" required>
+
+                <label class="form-check-label text-white">
+
+                    I agree to the
+
+                    <a href="{% url 'terms_conditions' %}" class="text-warning" target="_blank">
+
+                        Terms & Conditions
+
+                    </a>
+
+                </label>
+
+            </div>
+
+            <!-- Button -->
+
+            <button class="btn btn-success w-100 py-2">
+                Register
+            </button>
+
+        </form>
+
+        <p class="text-center text-light mt-3">
+            Your account will be activated after admin approval.
+        </p>
+
+        <hr class="text-white">
+
+        <p class="text-center mb-0 text-white">
+
+            Already have an account?
+
+            <a href="{% url 'login' %}" class="text-warning">
+
+                Login
+
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

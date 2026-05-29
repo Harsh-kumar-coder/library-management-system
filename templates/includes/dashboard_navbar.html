@@ -1,0 +1,228 @@
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);">
+
+    <div class="container">
+
+        <!-- BRAND -->
+
+        <a class="navbar-brand fw-bold text-warning" href="{% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        {% url 'admin_dashboard' %}
+                    {% elif user.is_staff %}
+                        {% url 'staff_dashboard' %}
+                    {% else %}
+                        {% url 'student_dashboard' %}
+                    {% endif %}
+                 {% else %}
+                    {% url 'home' %}
+                 {% endif %}">
+
+            📚 Library Management System
+
+        </a>
+
+        <!-- TOGGLER -->
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <!-- NAVBAR -->
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav ms-auto align-items-center">
+
+                {% if user.is_authenticated %}
+
+                <!-- USERNAME -->
+
+                <li class="nav-item me-3">
+
+                    <span class="text-light small">
+
+                        👋 {{ request.user.username }}
+
+                    </span>
+
+                </li>
+
+                <!-- HOME -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link" href="
+                           {% if user.is_superuser %}
+                                {% url 'admin_dashboard' %}
+                           {% elif user.is_staff %}
+                                {% url 'staff_dashboard' %}
+                           {% else %}
+                                {% url 'student_dashboard' %}
+                           {% endif %}
+                           ">
+
+                        <i class="fa fa-home me-1"></i> Home
+
+                    </a>
+
+                </li>
+
+                <!-- PROFILE -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link" href="{% url 'profile' %}">
+
+                        <i class="fa fa-user me-1"></i> Profile
+
+                    </a>
+
+                </li>
+
+                <!-- ADMIN -->
+
+                {% if user.is_superuser %}
+
+                <li class="nav-item">
+
+                    <a class="nav-link text-warning" href="/admin">
+
+                        <i class="fa fa-cog me-1"></i> Admin
+
+                    </a>
+
+                </li>
+
+                {% endif %}
+
+                <!-- LOGOUT -->
+
+                <li class="nav-item ms-2">
+
+                    <button type="button" class="btn btn-outline-warning btn-sm px-3" data-bs-toggle="modal"
+                        data-bs-target="#logoutModal">
+
+                        <i class="fa fa-sign-out-alt me-1"></i> Logout
+
+                    </button>
+
+                </li>
+
+                {% else %}
+
+                <!-- LOGIN -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link" href="{% url 'login' %}">
+
+                        <i class="fa fa-sign-in-alt me-1"></i> Login
+
+                    </a>
+
+                </li>
+
+                <!-- REGISTER -->
+
+                <li class="nav-item ms-2">
+
+                    <a class="btn btn-success btn-sm px-3" href="{% url 'select_role' %}">
+
+                        <i class="fa fa-user-plus me-1"></i> Register
+
+                    </a>
+
+                </li>
+
+                {% endif %}
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- LOGOUT MODAL -->
+
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content border-0" style="
+             border-radius:22px;
+             overflow:hidden;
+             max-width:340px;
+             margin:auto;
+             ">
+
+            <div class="modal-body text-center p-4">
+
+                <div class="mb-3">
+
+                    <div style="
+                        width:65px;
+                        height:65px;
+                        background:#fff3cd;
+                        border-radius:50%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        margin:auto;
+                    ">
+
+                        <i class="fa fa-sign-out-alt
+                                  text-warning
+                                  fs-3">
+                        </i>
+
+                    </div>
+
+                </div>
+
+                <h5 class="fw-bold mb-2">
+
+                    Logout Account
+
+                </h5>
+
+                <p class="text-muted small mb-4">
+
+                    Are you sure you want to logout?
+
+                </p>
+
+                <div class="d-flex gap-2">
+
+                    <button type="button" class="btn btn-light w-50" style="border-radius:12px;"
+                        data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <form method="POST" action="{% url 'logout' %}" class="w-50">
+
+                        {% csrf_token %}
+
+                        <button type="submit" class="btn btn-danger w-100" style="border-radius:12px;">
+
+                            Logout
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

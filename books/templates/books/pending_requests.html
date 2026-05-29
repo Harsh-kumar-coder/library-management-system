@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-5">
+
+    <!-- HEADING -->
+    <div class="text-center mb-4">
+        <h2 class="text-white fw-bold">
+            📚 Pending Book Requests
+        </h2>
+    </div>
+
+    <!-- CARD -->
+    <div class="card shadow-lg border-0 p-4" style="border-radius:20px;">
+
+        <!-- SEARCH -->
+        <div class="position-relative mb-3">
+
+            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                🔍
+            </span>
+
+            <input type="text" id="searchRequest" class="form-control ps-5"
+                placeholder="Search student, book or status..." style="
+                        background: rgba(255,255,255,0.9);
+                        border: 1px solid rgba(0,0,0,0.1);
+                        border-radius: 12px;
+                        color: #000;
+                        height: 42px;
+                   ">
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle" id="requestTable">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Student</th>
+
+                        <th>Book</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for req in requests %}
+
+                    <tr>
+
+                        <td>
+                            {{ req.student.username }}
+                        </td>
+
+                        <td>
+                            {{ req.book.title }}
+                        </td>
+
+                        <td>
+
+                            {% if req.approved %}
+
+                            <span class="badge bg-success">
+                                Approved
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if not req.approved %}
+
+                            <a href="{% url 'approve_request' req.id %}" class="btn btn-success btn-sm">
+
+                                Approve
+
+                            </a>
+
+                            {% else %}
+
+                            <button class="btn btn-success btn-sm" disabled>
+
+                                Done
+
+                            </button>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="4" class="text-center">
+
+                            No Pending Requests
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    #searchRequest::placeholder {
+        color: #000;
+        opacity: 1;
+    }
+</style>
+
+<!-- SEARCH SCRIPT -->
+<script>
+
+    document.getElementById("searchRequest").addEventListener("keyup", function () {
+
+        let value = this.value.toLowerCase();
+
+        document.querySelectorAll("#requestTable tbody tr").forEach(row => {
+
+            row.style.display =
+                row.innerText.toLowerCase().includes(value)
+                    ? ""
+                    : "none";
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}

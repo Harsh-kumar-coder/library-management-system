@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6">
+
+            <!-- GLASS CARD -->
+            <div class="glass-card p-4 text-center">
+
+                <!-- IMAGE -->
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" width="110" class="mb-3"
+                    style="border-radius:50%; border:3px solid #ffc107;">
+
+                <h3 class="text-white fw-bold">
+                    Student Profile
+                </h3>
+
+                <p class="text-light opacity-75 mb-4">
+                    Account Information
+                </p>
+
+                <hr class="text-light">
+
+                <!-- INFO -->
+                <div class="text-start text-light">
+
+                    <p>
+                        <strong>Username :</strong>
+                        {{ request.user.username }}
+                    </p>
+
+                    <p>
+                        <strong>Email :</strong>
+                        {{ request.user.email }}
+                    </p>
+
+                    <p>
+                        <strong>Roll Number :</strong>
+                        {{ request.user.first_name }}
+                    </p>
+
+                    <p>
+                        <strong>Role :</strong>
+                        Student
+                    </p>
+
+                    <p>
+                        <strong>Status :</strong>
+
+                        {% if request.user.is_active %}
+                        <span class="badge bg-success">Active</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}
