@@ -21,17 +21,9 @@ urlpatterns = [
         name='return_book_action'
     ),
 
-    path(
-        'request-book/',
-        views.request_book,
-        name='request_book'
-    ),
+    path('request-book/', views.request_book, name='request_book'),
 
-    path(
-        'view-requests/',
-        views.view_requests,
-        name='view_requests'
-    ),
+    path('view-requests/', views.view_requests, name='view_requests'),
 
     path(
         'approve-request/<int:request_id>/',
@@ -39,38 +31,22 @@ urlpatterns = [
         name='approve_request'
     ),
 
+    # NEW: Reject book request
     path(
-        'donate/',
-        views.donate,
-        name='donate'
+        'reject-request/<int:request_id>/',
+        views.reject_request,
+        name='reject_request'
     ),
 
-    path(
-        'donations/',
-        views.donation_list,
-        name='donation_list'
-    ),
+    path('donate/', views.donate, name='donate'),
 
-    path(
-        'thank-you/',
-        views.thank_you,
-        name='thank_you'
-    ),
+    path('donations/', views.donation_list, name='donation_list'),
 
-    path('pending-requests/',
-          views.pending_requests_page,
-          name='pending_requests'
-        ),
+    path('thank-you/', views.thank_you, name='thank_you'),
 
-    path(
-        'contact/',
-        views.contact,
-        name='contact'
-    ),
+    path('pending-requests/', views.pending_requests_page, name='pending_requests'),
 
-    path(
-        'contact-messages/',
-        views.contact_messages,
-        name='contact_messages'
-    ),
+    path('contact/', views.contact, name='contact'),
+
+    path('contact-messages/', views.contact_messages, name='contact_messages'),
 ]

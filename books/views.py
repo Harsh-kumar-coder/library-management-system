@@ -17,21 +17,16 @@ from .models import (
 @login_required
 def book_list(request):
 
-    query = request.GET.get('q')
+    query = request.GET.get('q', '').strip()
 
     if query:
-
-        books = Book.objects.filter(
-            title__icontains=query
-        ) | Book.objects.filter(
-            author__icontains=query
-        ) | Book.objects.filter(
-            isbn__icontains=query
-        )
-
+        books = (
+            Book.objects.filter(title__icontains=query) |
+            Book.objects.filter(author__icontains=query) |
+            Book.objects.filter(isbn__icontains=query)
+        ).distinct()
     else:
-
-        books = Book.objects.all()
+        books = Book.objects.all().order_by('title')
 
     return render(request, 'books/book_list.html', {
         'books': books,
@@ -43,26 +38,43 @@ def book_list(request):
 @login_required
 def add_book(request):
 
-    if not (
-        request.user.is_superuser or
-        request.user.is_staff
-    ):
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Access denied.")
         return redirect('student_dashboard')
 
     if request.method == 'POST':
 
-        title = request.POST.get('title')
-        author = request.POST.get('author')
-        isbn = request.POST.get('isbn')
-        quantity = request.POST.get('quantity')
+        title = request.POST.get('title', '').strip()
+        author = request.POST.get('author', '').strip()
+        isbn = request.POST.get('isbn', '').strip()
+        quantity = request.POST.get('quantity', '1').strip()
+
+        # BUG FIX: Validate required fields
+        if not title or not author:
+            messages.error(request, "Title aur Author required hain.")
+            return render(request, 'books/add_book.html')
+
+        # BUG FIX: Validate quantity is a positive integer
+        try:
+            quantity = int(quantity)
+            if quantity < 1:
+                raise ValueError
+        except ValueError:
+            messages.error(request, "Quantity valid positive number hona chahiye.")
+            return render(request, 'books/add_book.html')
+
+        # BUG FIX: Check duplicate ISBN (if provided)
+        if isbn and Book.objects.filter(isbn=isbn).exclude(isbn='N/A').exists():
+            messages.error(request, f"ISBN '{isbn}' pehle se exist karta hai.")
+            return render(request, 'books/add_book.html')
 
         Book.objects.create(
             title=title,
             author=author,
-            isbn=isbn,
+            isbn=isbn or 'N/A',
             quantity=quantity
         )
-
+        messages.success(request, f"Book '{title}' successfully add ho gaya.")
         return redirect('book_list')
 
     return render(request, 'books/add_book.html')
@@ -72,44 +84,77 @@ def add_book(request):
 @login_required
 def edit_book(request, id):
 
-    if not (
-        request.user.is_superuser or
-        request.user.is_staff
-    ):
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Access denied.")
         return redirect('student_dashboard')
 
     book = get_object_or_404(Book, id=id)
 
     if request.method == 'POST':
 
-        book.title = request.POST.get('title')
-        book.author = request.POST.get('author')
-        book.isbn = request.POST.get('isbn')
-        book.quantity = request.POST.get('quantity')
+        title = request.POST.get('title', '').strip()
+        author = request.POST.get('author', '').strip()
+        isbn = request.POST.get('isbn', '').strip()
+        quantity = request.POST.get('quantity', '1').strip()
 
+        # BUG FIX: Validate required fields
+        if not title or not author:
+            messages.error(request, "Title aur Author required hain.")
+            return render(request, 'books/edit_book.html', {'book': book})
+
+        # BUG FIX: Validate quantity
+        try:
+            quantity = int(quantity)
+            if quantity < 1:
+                raise ValueError
+        except ValueError:
+            messages.error(request, "Quantity valid positive number hona chahiye.")
+            return render(request, 'books/edit_book.html', {'book': book})
+
+        # BUG FIX: Check if quantity going below currently issued count
+        issued_count = IssuedBook.objects.filter(book=book, returned=False).count()
+        if quantity < issued_count:
+            messages.error(
+                request,
+                f"Quantity {issued_count} se kam nahi ho sakti "
+                f"(abhi {issued_count} books issued hain)."
+            )
+            return render(request, 'books/edit_book.html', {'book': book})
+
+        book.title = title
+        book.author = author
+        book.isbn = isbn or 'N/A'
+        book.quantity = quantity
         book.save()
 
+        messages.success(request, "Book successfully update ho gaya.")
         return redirect('book_list')
 
-    return render(request, 'books/edit_book.html', {
-        'book': book
-    })
+    return render(request, 'books/edit_book.html', {'book': book})
 
 
 # ---------------- DELETE BOOK ----------------
 @login_required
 def delete_book(request, id):
 
-    if not (
-        request.user.is_superuser or
-        request.user.is_staff
-    ):
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Access denied.")
         return redirect('student_dashboard')
 
     book = get_object_or_404(Book, id=id)
 
-    book.delete()
+    # BUG FIX: Prevent deletion if book is currently issued
+    active_issues = IssuedBook.objects.filter(book=book, returned=False).count()
+    if active_issues > 0:
+        messages.error(
+            request,
+            f"Yeh book delete nahi ho sakti — abhi {active_issues} student(s) ke paas issued hai."
+        )
+        return redirect('book_list')
 
+    book_title = book.title
+    book.delete()
+    messages.success(request, f"'{book_title}' successfully delete ho gaya.")
     return redirect('book_list')
 
 
@@ -117,17 +162,13 @@ def delete_book(request, id):
 @login_required
 def issue_book(request):
 
-    if not (
-        request.user.is_superuser or
-        request.user.is_staff
-    ):
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Access denied.")
         return redirect('student_dashboard')
 
-    students = User.objects.filter(
-        is_staff=False
-    )
-
-    books = Book.objects.all()
+    # BUG FIX: Only show active (approved) students, not all non-staff users
+    students = User.objects.filter(is_staff=False, is_superuser=False, is_active=True)
+    books = Book.objects.all().order_by('title')
 
     if request.method == 'POST':
 
@@ -135,36 +176,70 @@ def issue_book(request):
         book_id = request.POST.get('book')
         issue_date = request.POST.get('issue_date')
 
-        student = User.objects.get(id=student_id)
+        # BUG FIX: Validate all fields present
+        if not student_id or not book_id or not issue_date:
+            messages.error(request, "Saare fields fill karo.")
+            return render(request, 'books/issue_book.html', {
+                'students': students, 'books': books
+            })
 
-        book = Book.objects.get(id=book_id)
+        try:
+            student = User.objects.get(id=student_id)
+            book = Book.objects.get(id=book_id)
+        except (User.DoesNotExist, Book.DoesNotExist):
+            messages.error(request, "Student ya Book nahi mili.")
+            return render(request, 'books/issue_book.html', {
+                'students': students, 'books': books
+            })
 
-        return_date = (
-            timezone.datetime.strptime(
-                issue_date,
-                "%Y-%m-%d"
-            ).date()
-            + timezone.timedelta(days=7)
-        )
+        # BUG FIX: Check book availability (quantity vs currently issued)
+        currently_issued = IssuedBook.objects.filter(book=book, returned=False).count()
+        if currently_issued >= book.quantity:
+            messages.error(
+                request,
+                f"'{book.title}' abhi available nahi hai (sab copies issued hain)."
+            )
+            return render(request, 'books/issue_book.html', {
+                'students': students, 'books': books
+            })
 
-        fine = 0
+        # BUG FIX: Check student book limit (max 2)
+        student_active = IssuedBook.objects.filter(
+            student=student, returned=False
+        ).count()
+        if student_active >= 2:
+            messages.error(
+                request,
+                f"{student.username} ke paas already 2 books issued hain."
+            )
+            return render(request, 'books/issue_book.html', {
+                'students': students, 'books': books
+            })
 
-        if timezone.now().date() > return_date:
+        try:
+            issue_date_obj = timezone.datetime.strptime(issue_date, "%Y-%m-%d").date()
+        except ValueError:
+            messages.error(request, "Invalid date format.")
+            return render(request, 'books/issue_book.html', {
+                'students': students, 'books': books
+            })
 
-            days_late = (
-                timezone.now().date() - return_date
-            ).days
+        return_date = issue_date_obj + timezone.timedelta(days=14)  # BUG FIX: 14 days is standard
 
-            fine = days_late * 5
-
+        # BUG FIX: Fine only on actual return, not at issue time
         IssuedBook.objects.create(
             student=student,
             book=book,
-            issue_date=issue_date,
+            issue_date=issue_date_obj,
             return_date=return_date,
-            fine=fine
+            fine=0
         )
 
+        messages.success(
+            request,
+            f"'{book.title}' successfully {student.username} ko issue ho gaya. "
+            f"Return date: {return_date}"
+        )
         return redirect('return_book')
 
     return render(request, 'books/issue_book.html', {
@@ -177,22 +252,26 @@ def issue_book(request):
 @login_required
 def return_book(request):
 
-    issued_books = IssuedBook.objects.all().order_by(
-        'returned',
-        '-issue_date'
-    )
-
-    if not (
-        request.user.is_superuser or
-        request.user.is_staff
-    ):
-
-        issued_books = issued_books.filter(
+    if request.user.is_superuser or request.user.is_staff:
+        issued_books = IssuedBook.objects.all().order_by('returned', '-issue_date')
+    else:
+        issued_books = IssuedBook.objects.filter(
             student=request.user
-        )
+        ).order_by('returned', '-issue_date')
+
+    # BUG FIX: Calculate and update fines dynamically on page load
+    today = timezone.now().date()
+    for issue in issued_books:
+        if not issue.returned and issue.return_date and today > issue.return_date:
+            days_late = (today - issue.return_date).days
+            new_fine = days_late * 5  # Rs. 5 per day
+            if issue.fine != new_fine:
+                issue.fine = new_fine
+                issue.save()
 
     return render(request, 'books/return_book.html', {
-        'issued_books': issued_books
+        'issued_books': issued_books,
+        'today': today,
     })
 
 
@@ -200,21 +279,33 @@ def return_book(request):
 @login_required
 def return_book_action(request, issue_id):
 
-    if not (
-        request.user.is_superuser or
-        request.user.is_staff
-    ):
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Access denied.")
         return redirect('student_dashboard')
 
-    issue = get_object_or_404(
-        IssuedBook,
-        id=issue_id
-    )
+    issue = get_object_or_404(IssuedBook, id=issue_id)
+
+    # BUG FIX: Prevent returning already returned book
+    if issue.returned:
+        messages.warning(request, "Yeh book pehle se return ho chuki hai.")
+        return redirect('return_book')
+
+    # BUG FIX: Calculate final fine at time of return
+    today = timezone.now().date()
+    if issue.return_date and today > issue.return_date:
+        days_late = (today - issue.return_date).days
+        issue.fine = days_late * 5
+    else:
+        issue.fine = 0
 
     issue.returned = True
-
     issue.save()
 
+    messages.success(
+        request,
+        f"'{issue.book.title}' return ho gayi. "
+        f"{'Fine: Rs. ' + str(issue.fine) if issue.fine > 0 else 'No fine.'}"
+    )
     return redirect('return_book')
 
 
@@ -222,53 +313,71 @@ def return_book_action(request, issue_id):
 @login_required
 def request_book(request):
 
-    books = Book.objects.all()
+    books = Book.objects.all().order_by('title')
 
-    # total active books (issued + approved request)
     issued_count = IssuedBook.objects.filter(
-        student=request.user,
-        returned=False
+        student=request.user, returned=False
     ).count()
 
-    approved_request_count = BookRequest.objects.filter(
-        student=request.user,
-        approved=True
+    # BUG FIX: Only count pending (unapproved) requests, not all approved ones
+    pending_request_count = BookRequest.objects.filter(
+        student=request.user, approved=False
     ).count()
 
-    total_books = issued_count + approved_request_count
+    total_active = issued_count + pending_request_count
 
     if request.method == 'POST':
 
-        # limit 2 books
-        if total_books >= 2:
-
+        if total_active >= 2:
+            messages.error(request, "Aap maximum 2 books hi request kar sakte hain.")
             return render(request, 'books/request_book.html', {
                 'books': books,
-                'error': 'You can only request maximum 2 books.'
+                'total_books': total_active
             })
 
         book_id = request.POST.get('book')
+        if not book_id:
+            messages.error(request, "Book select karo.")
+            return render(request, 'books/request_book.html', {
+                'books': books,
+                'total_books': total_active
+            })
 
-        book = Book.objects.get(id=book_id)
+        try:
+            book = Book.objects.get(id=book_id)
+        except Book.DoesNotExist:
+            messages.error(request, "Book nahi mili.")
+            return render(request, 'books/request_book.html', {
+                'books': books,
+                'total_books': total_active
+            })
+
+        # BUG FIX: Check if same book already issued to this student
+        already_issued = IssuedBook.objects.filter(
+            student=request.user, book=book, returned=False
+        ).exists()
+        if already_issued:
+            messages.error(request, f"'{book.title}' aapke paas already issued hai.")
+            return render(request, 'books/request_book.html', {
+                'books': books,
+                'total_books': total_active
+            })
 
         already_requested = BookRequest.objects.filter(
-            student=request.user,
-            book=book,
-            approved=False
+            student=request.user, book=book, approved=False
         ).exists()
 
-        if not already_requested:
-
-            BookRequest.objects.create(
-                student=request.user,
-                book=book
-            )
+        if already_requested:
+            messages.warning(request, f"'{book.title}' ke liye aapne pehle se request ki hai.")
+        else:
+            BookRequest.objects.create(student=request.user, book=book)
+            messages.success(request, f"'{book.title}' ke liye request send ho gayi.")
 
         return redirect('student_dashboard')
 
     return render(request, 'books/request_book.html', {
         'books': books,
-        'total_books': total_books
+        'total_books': total_active
     })
 
 
@@ -276,16 +385,12 @@ def request_book(request):
 @login_required
 def view_requests(request):
 
-    if not (
-        request.user.is_superuser or
-        request.user.is_staff
-    ):
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Access denied.")
         return redirect('student_dashboard')
 
-    # pending top
-    requests = BookRequest.objects.all().order_by(
-        'approved',
-        '-id'
+    requests = BookRequest.objects.all().order_by('approved', '-id').select_related(
+        'student', 'book'
     )
 
     return render(request, 'books/pending_requests.html', {
@@ -293,16 +398,16 @@ def view_requests(request):
     })
 
 
-# ---------------- PENDING REQUESTS ----------------
+# ---------------- PENDING REQUESTS PAGE ----------------
 @login_required
 def pending_requests_page(request):
 
     if not request.user.is_superuser:
         return redirect('login')
 
-    requests = BookRequest.objects.filter(
-        approved=False
-    ).order_by('-id')
+    requests = BookRequest.objects.filter(approved=False).order_by('-id').select_related(
+        'student', 'book'
+    )
 
     return render(request, 'books/pending_requests.html', {
         'requests': requests
@@ -313,35 +418,76 @@ def pending_requests_page(request):
 @login_required
 def approve_request(request, request_id):
 
-    if not (
-        request.user.is_superuser or
-        request.user.is_staff
-    ):
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Access denied.")
         return redirect('student_dashboard')
 
-    req = get_object_or_404(
-        BookRequest,
-        id=request_id
+    req = get_object_or_404(BookRequest, id=request_id)
+
+    if req.approved:
+        messages.warning(request, "Yeh request pehle se approve ho chuki hai.")
+        return redirect('view_requests')
+
+    # BUG FIX: Check availability before approving
+    currently_issued = IssuedBook.objects.filter(book=req.book, returned=False).count()
+    if currently_issued >= req.book.quantity:
+        messages.error(
+            request,
+            f"'{req.book.title}' abhi available nahi hai. Request approve nahi ho sakti."
+        )
+        return redirect('view_requests')
+
+    # BUG FIX: Check student's current book count
+    student_active = IssuedBook.objects.filter(
+        student=req.student, returned=False
+    ).count()
+    if student_active >= 2:
+        messages.error(
+            request,
+            f"{req.student.username} ke paas already 2 books hain."
+        )
+        return redirect('view_requests')
+
+    req.approved = True
+    req.save()
+
+    return_date = timezone.now().date() + timezone.timedelta(days=14)
+
+    IssuedBook.objects.create(
+        student=req.student,
+        book=req.book,
+        issue_date=timezone.now().date(),
+        return_date=return_date,
+        fine=0
     )
 
-    # prevent duplicate approval
-    if not req.approved:
+    messages.success(
+        request,
+        f"'{req.book.title}' — {req.student.username} ki request approve ho gayi."
+    )
+    return redirect('view_requests')
 
-        req.approved = True
-        req.save()
 
-        return_date = (
-            timezone.now().date()
-            + timezone.timedelta(days=7)
-        )
+# ---------------- REJECT REQUEST ----------------
+@login_required
+def reject_request(request, request_id):
+    """BUG FIX: New view — reject/delete a book request"""
 
-        IssuedBook.objects.create(
-            student=req.student,
-            book=req.book,
-            issue_date=timezone.now().date(),
-            return_date=return_date
-        )
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Access denied.")
+        return redirect('student_dashboard')
 
+    req = get_object_or_404(BookRequest, id=request_id)
+
+    if req.approved:
+        messages.warning(request, "Approved request reject nahi ho sakti.")
+        return redirect('view_requests')
+
+    student_name = req.student.username
+    book_title = req.book.title
+    req.delete()
+
+    messages.success(request, f"{student_name} ki '{book_title}' request reject ho gayi.")
     return redirect('view_requests')
 
 
@@ -350,85 +496,94 @@ def donate(request):
 
     if request.method == "POST":
 
-        name = request.POST.get('name')
+        name = request.POST.get('name', '').strip()
         name = name if name else "Anonymous"
 
-        amount = request.POST.get('amount')
-        message = request.POST.get('message')
+        amount_raw = request.POST.get('amount', '').strip()
+        message = request.POST.get('message', '').strip()
 
-        if amount == '' or amount is None:
-
-            amount = None
-
-        else:
-
+        amount = None
+        if amount_raw:
             try:
-                amount = int(amount)
-
+                amount = int(amount_raw)
+                # BUG FIX: Validate amount is positive
+                if amount <= 0:
+                    messages.error(request, "Amount positive hona chahiye.")
+                    return render(request, 'books/donate.html')
             except ValueError:
-                amount = None
+                messages.error(request, "Amount valid number hona chahiye.")
+                return render(request, 'books/donate.html')
 
         Donation.objects.create(
             name=name,
             amount=amount,
             message=message
         )
-
         return redirect('thank_you')
 
     return render(request, 'books/donate.html')
+
 
 # ---------------- DONATION LIST ----------------
 @login_required
 def donation_list(request):
 
     if not request.user.is_superuser:
+        messages.error(request, "Access denied.")
         return redirect('login')
 
     donations = Donation.objects.all().order_by('-created_at')
+    total = sum(d.amount for d in donations if d.amount)
 
-    return render(
-        request,
-        'books/donation_list.html',
-        {'donations': donations}
-    )
+    return render(request, 'books/donation_list.html', {
+        'donations': donations,
+        'total': total,
+    })
+
 
 # ---------------- THANK YOU ----------------
 def thank_you(request):
-
     return render(request, 'books/thank_you.html')
+
 
 # ---------------- CONTACT ----------------
 def contact(request):
 
     if request.method == "POST":
 
-        ContactMessage.objects.create(
-            name=request.POST.get('name'),
-            email=request.POST.get('email'),
-            subject=request.POST.get('subject'),
-            message=request.POST.get('message')
-        )
-        messages.success(
-            request,
-            "Your message has been sent successfully."
-        )
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip()
+        subject = request.POST.get('subject', '').strip()
+        msg = request.POST.get('message', '').strip()
 
+        # BUG FIX: Validate all fields
+        if not name or not email or not subject or not msg:
+            messages.error(request, "Saare fields fill karo.")
+            return render(request, 'contact.html')
+
+        ContactMessage.objects.create(
+            name=name,
+            email=email,
+            subject=subject,
+            message=msg
+        )
+        messages.success(request, "Aapka message successfully send ho gaya.")
         return redirect('contact')
 
     return render(request, 'contact.html')
+
 
 # ---------------- CONTACT MESSAGES ----------------
 @login_required
 def contact_messages(request):
 
     if not request.user.is_superuser:
+        messages.error(request, "Access denied.")
         return redirect('login')
 
-    messages = ContactMessage.objects.all().order_by('-created_at')
+    # BUG FIX: Renamed local variable to avoid shadowing django messages
+    contact_msgs = ContactMessage.objects.all().order_by('-created_at')
 
-    return render(
-        request,
-        'contact_messages.html',
-        {'messages': messages}
-    )
+    return render(request, 'contact_messages.html', {
+        'messages_list': contact_msgs
+    })
