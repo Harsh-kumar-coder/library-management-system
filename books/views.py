@@ -51,7 +51,7 @@ def add_book(request):
 
         # BUG FIX: Validate required fields
         if not title or not author:
-            messages.error(request, "Title aur Author required hain.")
+            messages.error(request, "Title and Author are required.")
             return render(request, 'books/add_book.html')
 
         # BUG FIX: Validate quantity is a positive integer
@@ -60,12 +60,12 @@ def add_book(request):
             if quantity < 1:
                 raise ValueError
         except ValueError:
-            messages.error(request, "Quantity valid positive number hona chahiye.")
+            messages.error(request, "Quantity must be a positive number.")
             return render(request, 'books/add_book.html')
 
         # BUG FIX: Check duplicate ISBN (if provided)
         if isbn and Book.objects.filter(isbn=isbn).exclude(isbn='N/A').exists():
-            messages.error(request, f"ISBN '{isbn}' pehle se exist karta hai.")
+            messages.error(request, f"ISBN '{isbn}' already exists.")
             return render(request, 'books/add_book.html')
 
         Book.objects.create(
@@ -74,7 +74,7 @@ def add_book(request):
             isbn=isbn or 'N/A',
             quantity=quantity
         )
-        messages.success(request, f"Book '{title}' successfully add ho gaya.")
+        messages.success(request, f"Book '{title}' successfully added.")
         return redirect('book_list')
 
     return render(request, 'books/add_book.html')
@@ -99,7 +99,7 @@ def edit_book(request, id):
 
         # BUG FIX: Validate required fields
         if not title or not author:
-            messages.error(request, "Title aur Author required hain.")
+            messages.error(request, "Title and Author are required.")
             return render(request, 'books/edit_book.html', {'book': book})
 
         # BUG FIX: Validate quantity
@@ -108,7 +108,7 @@ def edit_book(request, id):
             if quantity < 1:
                 raise ValueError
         except ValueError:
-            messages.error(request, "Quantity valid positive number hona chahiye.")
+            messages.error(request, "Quantity must be a positive number.")
             return render(request, 'books/edit_book.html', {'book': book})
 
         # BUG FIX: Check if quantity going below currently issued count
@@ -116,8 +116,8 @@ def edit_book(request, id):
         if quantity < issued_count:
             messages.error(
                 request,
-                f"Quantity {issued_count} se kam nahi ho sakti "
-                f"(abhi {issued_count} books issued hain)."
+                f"Quantity {issued_count} cannot be less than the number of currently issued books "
+                f"(currently {issued_count} books are issued)."
             )
             return render(request, 'books/edit_book.html', {'book': book})
 
@@ -127,7 +127,7 @@ def edit_book(request, id):
         book.quantity = quantity
         book.save()
 
-        messages.success(request, "Book successfully update ho gaya.")
+        messages.success(request, "Book successfully updated.")
         return redirect('book_list')
 
     return render(request, 'books/edit_book.html', {'book': book})
@@ -148,13 +148,13 @@ def delete_book(request, id):
     if active_issues > 0:
         messages.error(
             request,
-            f"Yeh book delete nahi ho sakti — abhi {active_issues} student(s) ke paas issued hai."
+            f"This book cannot be deleted — {active_issues} student(s) currently have it issued."
         )
         return redirect('book_list')
 
     book_title = book.title
     book.delete()
-    messages.success(request, f"'{book_title}' successfully delete ho gaya.")
+    messages.success(request, f"'{book_title}' successfully deleted.")
     return redirect('book_list')
 
 
@@ -178,7 +178,7 @@ def issue_book(request):
 
         # BUG FIX: Validate all fields present
         if not student_id or not book_id or not issue_date:
-            messages.error(request, "Saare fields fill karo.")
+            messages.error(request, "Please fill in all required fields.")
             return render(request, 'books/issue_book.html', {
                 'students': students, 'books': books
             })
@@ -187,7 +187,7 @@ def issue_book(request):
             student = User.objects.get(id=student_id)
             book = Book.objects.get(id=book_id)
         except (User.DoesNotExist, Book.DoesNotExist):
-            messages.error(request, "Student ya Book nahi mili.")
+            messages.error(request, "Student or Book not found.")
             return render(request, 'books/issue_book.html', {
                 'students': students, 'books': books
             })
@@ -197,7 +197,7 @@ def issue_book(request):
         if currently_issued >= book.quantity:
             messages.error(
                 request,
-                f"'{book.title}' abhi available nahi hai (sab copies issued hain)."
+                f"'{book.title}' is not available (all copies are issued)."
             )
             return render(request, 'books/issue_book.html', {
                 'students': students, 'books': books
@@ -210,7 +210,7 @@ def issue_book(request):
         if student_active >= 2:
             messages.error(
                 request,
-                f"{student.username} ke paas already 2 books issued hain."
+                f"{student.username} has already issued 2 books."
             )
             return render(request, 'books/issue_book.html', {
                 'students': students, 'books': books
@@ -237,7 +237,7 @@ def issue_book(request):
 
         messages.success(
             request,
-            f"'{book.title}' successfully {student.username} ko issue ho gaya. "
+            f"'{book.title}' successfully issued to {student.username}. "
             f"Return date: {return_date}"
         )
         return redirect('return_book')
@@ -287,7 +287,7 @@ def return_book_action(request, issue_id):
 
     # BUG FIX: Prevent returning already returned book
     if issue.returned:
-        messages.warning(request, "Yeh book pehle se return ho chuki hai.")
+        messages.warning(request, "This book has already been returned.")
         return redirect('return_book')
 
     # BUG FIX: Calculate final fine at time of return
@@ -303,7 +303,7 @@ def return_book_action(request, issue_id):
 
     messages.success(
         request,
-        f"'{issue.book.title}' return ho gayi. "
+        f"'{issue.book.title}' returned. "
         f"{'Fine: Rs. ' + str(issue.fine) if issue.fine > 0 else 'No fine.'}"
     )
     return redirect('return_book')
@@ -329,7 +329,7 @@ def request_book(request):
     if request.method == 'POST':
 
         if total_active >= 2:
-            messages.error(request, "Aap maximum 2 books hi request kar sakte hain.")
+            messages.error(request, "You can request a maximum of 2 books.")
             return render(request, 'books/request_book.html', {
                 'books': books,
                 'total_books': total_active
@@ -337,7 +337,7 @@ def request_book(request):
 
         book_id = request.POST.get('book')
         if not book_id:
-            messages.error(request, "Book select karo.")
+            messages.error(request, "Please select a book.")
             return render(request, 'books/request_book.html', {
                 'books': books,
                 'total_books': total_active
@@ -346,7 +346,7 @@ def request_book(request):
         try:
             book = Book.objects.get(id=book_id)
         except Book.DoesNotExist:
-            messages.error(request, "Book nahi mili.")
+            messages.error(request, "Book not found.")
             return render(request, 'books/request_book.html', {
                 'books': books,
                 'total_books': total_active
@@ -357,7 +357,7 @@ def request_book(request):
             student=request.user, book=book, returned=False
         ).exists()
         if already_issued:
-            messages.error(request, f"'{book.title}' aapke paas already issued hai.")
+            messages.error(request, f"'{book.title}' is already issued to you.")
             return render(request, 'books/request_book.html', {
                 'books': books,
                 'total_books': total_active
@@ -368,10 +368,10 @@ def request_book(request):
         ).exists()
 
         if already_requested:
-            messages.warning(request, f"'{book.title}' ke liye aapne pehle se request ki hai.")
+            messages.warning(request, f"'{book.title}' is already requested by you.")
         else:
             BookRequest.objects.create(student=request.user, book=book)
-            messages.success(request, f"'{book.title}' ke liye request send ho gayi.")
+            messages.success(request, f"Request for '{book.title}' has been sent.")
 
         return redirect('student_dashboard')
 
@@ -425,7 +425,7 @@ def approve_request(request, request_id):
     req = get_object_or_404(BookRequest, id=request_id)
 
     if req.approved:
-        messages.warning(request, "Yeh request pehle se approve ho chuki hai.")
+        messages.warning(request, "This request has already been approved.")
         return redirect('view_requests')
 
     # BUG FIX: Check availability before approving
@@ -433,7 +433,7 @@ def approve_request(request, request_id):
     if currently_issued >= req.book.quantity:
         messages.error(
             request,
-            f"'{req.book.title}' abhi available nahi hai. Request approve nahi ho sakti."
+            f"'{req.book.title}' is not available (all copies are issued)."
         )
         return redirect('view_requests')
 
@@ -444,7 +444,7 @@ def approve_request(request, request_id):
     if student_active >= 2:
         messages.error(
             request,
-            f"{req.student.username} ke paas already 2 books hain."
+            f"{req.student.username} has already issued 2 books."
         )
         return redirect('view_requests')
 
@@ -463,7 +463,7 @@ def approve_request(request, request_id):
 
     messages.success(
         request,
-        f"'{req.book.title}' — {req.student.username} ki request approve ho gayi."
+        f"'{req.book.title}' — {req.student.username} has been approved."
     )
     return redirect('view_requests')
 
@@ -480,14 +480,14 @@ def reject_request(request, request_id):
     req = get_object_or_404(BookRequest, id=request_id)
 
     if req.approved:
-        messages.warning(request, "Approved request reject nahi ho sakti.")
+        messages.warning(request, "Approved request cannot be rejected.")
         return redirect('view_requests')
 
     student_name = req.student.username
     book_title = req.book.title
     req.delete()
 
-    messages.success(request, f"{student_name} ki '{book_title}' request reject ho gayi.")
+    messages.success(request, f"{student_name}'s request for '{book_title}' has been rejected.")
     return redirect('view_requests')
 
 
@@ -508,10 +508,10 @@ def donate(request):
                 amount = int(amount_raw)
                 # BUG FIX: Validate amount is positive
                 if amount <= 0:
-                    messages.error(request, "Amount positive hona chahiye.")
+                    messages.error(request, "Amount must be a positive number.")
                     return render(request, 'books/donate.html')
             except ValueError:
-                messages.error(request, "Amount valid number hona chahiye.")
+                messages.error(request, "Amount must be a valid number.")
                 return render(request, 'books/donate.html')
 
         Donation.objects.create(
@@ -558,7 +558,7 @@ def contact(request):
 
         # BUG FIX: Validate all fields
         if not name or not email or not subject or not msg:
-            messages.error(request, "Saare fields fill karo.")
+            messages.error(request, "Please fill in all fields.")
             return render(request, 'contact.html')
 
         ContactMessage.objects.create(
@@ -567,7 +567,7 @@ def contact(request):
             subject=subject,
             message=msg
         )
-        messages.success(request, "Aapka message successfully send ho gaya.")
+        messages.success(request, "Your message has been sent successfully.")
         return redirect('contact')
 
     return render(request, 'contact.html')

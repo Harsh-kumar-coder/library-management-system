@@ -52,30 +52,30 @@ def student_register(request):
 
         # BUG FIX: Validate all required fields
         if not username or not roll_number or not email or not password:
-            messages.error(request, "Saare fields fill karo.")
+            messages.error(request, "Please fill in all required fields.")
             return render(request, 'accounts/student_register.html')
 
         if password != confirm_password:
-            messages.error(request, "Passwords match nahi kar rahe.")
+            messages.error(request, "Passwords do not match.")
             return render(request, 'accounts/student_register.html')
 
         # BUG FIX: Minimum password length
         if len(password) < 6:
-            messages.error(request, "Password kam se kam 6 characters ka hona chahiye.")
+            messages.error(request, "Password must be at least 6 characters long.")
             return render(request, 'accounts/student_register.html')
 
         if User.objects.filter(username=username).exists():
-            messages.error(request, "Username pehle se exist karta hai.")
+            messages.error(request, "Username already exists.")
             return render(request, 'accounts/student_register.html')
 
         # BUG FIX: Check email uniqueness
         if User.objects.filter(email=email).exists():
-            messages.error(request, "Yeh email pehle se registered hai.")
+            messages.error(request, "This email is already registered.")
             return render(request, 'accounts/student_register.html')
 
         # BUG FIX: Check roll number uniqueness (stored in first_name)
         if User.objects.filter(first_name=roll_number).exists():
-            messages.error(request, "Yeh Roll Number pehle se registered hai.")
+            messages.error(request, "This Roll Number is already registered.")
             return render(request, 'accounts/student_register.html')
 
         user = User.objects.create_user(
@@ -90,7 +90,7 @@ def student_register(request):
 
         messages.success(
             request,
-            "Student account create ho gaya. Admin approval ka wait karo."
+            "Student account created successfully. Please wait for admin approval."
         )
         return redirect('login')
 
@@ -112,23 +112,23 @@ def staff_register(request):
         confirm_password = request.POST.get('confirm_password', '')
 
         if not username or not staff_id or not email or not password:
-            messages.error(request, "Saare fields fill karo.")
+            messages.error(request, "Please fill in all required fields.")
             return render(request, 'accounts/staff_register.html')
 
         if password != confirm_password:
-            messages.error(request, "Passwords match nahi kar rahe.")
+            messages.error(request, "Passwords do not match.")
             return render(request, 'accounts/staff_register.html')
 
         if len(password) < 6:
-            messages.error(request, "Password kam se kam 6 characters ka hona chahiye.")
+            messages.error(request, "Password must be at least 6 characters long.")
             return render(request, 'accounts/staff_register.html')
 
         if User.objects.filter(username=username).exists():
-            messages.error(request, "Username pehle se exist karta hai.")
+            messages.error(request, "Username already exists.")
             return render(request, 'accounts/staff_register.html')
 
         if User.objects.filter(email=email).exists():
-            messages.error(request, "Yeh email pehle se registered hai.")
+            messages.error(request, "This email is already registered.")
             return render(request, 'accounts/staff_register.html')
 
         user = User.objects.create_user(
@@ -144,7 +144,7 @@ def staff_register(request):
 
         messages.success(
             request,
-            "Staff account create ho gaya. Admin approval ka wait karo."
+            "Staff account created successfully. Please wait for admin approval."
         )
         return redirect('login')
 
@@ -166,11 +166,11 @@ def admin_register(request):
         admin_code = request.POST.get('admin_code', '')
 
         if not username or not email or not password:
-            messages.error(request, "Saare fields fill karo.")
+            messages.error(request, "Please fill in all required fields.")
             return render(request, 'accounts/admin_register.html')
 
         if password != confirm_password:
-            messages.error(request, "Passwords match nahi kar rahe.")
+            messages.error(request, "Passwords do not match.")
             return render(request, 'accounts/admin_register.html')
 
         # BUG FIX: Admin code should come from settings, not hardcoded
@@ -180,11 +180,11 @@ def admin_register(request):
             return render(request, 'accounts/admin_register.html')
 
         if User.objects.filter(username=username).exists():
-            messages.error(request, "Username pehle se exist karta hai.")
+            messages.error(request, "Username already exists.")
             return render(request, 'accounts/admin_register.html')
 
         if User.objects.filter(email=email).exists():
-            messages.error(request, "Yeh email pehle se registered hai.")
+            messages.error(request, "This email is already registered.")
             return render(request, 'accounts/admin_register.html')
 
         user = User.objects.create_user(
@@ -198,7 +198,7 @@ def admin_register(request):
 
         Profile.objects.get_or_create(user=user, defaults={'role': 'admin'})
 
-        messages.success(request, "Admin account successfully create ho gaya.")
+        messages.success(request, "Admin account created successfully.")
         return redirect('login')
 
     return render(request, 'accounts/admin_register.html')
@@ -216,7 +216,7 @@ def login_view(request):
         password = request.POST.get('password', '')
 
         if not login_input or not password:
-            messages.error(request, "Username/email aur password dono daalo.")
+            messages.error(request, "Please enter both username/email and password.")
             return render(request, 'accounts/login.html')
 
         user = None
@@ -233,7 +233,7 @@ def login_view(request):
                 pass
             except User.MultipleObjectsReturned:
                 # BUG FIX: Handle duplicate emails gracefully
-                messages.error(request, "Multiple accounts is email se hain. Username use karo.")
+                messages.error(request, "Multiple accounts exist with this email. Please use your username.")
                 return render(request, 'accounts/login.html')
 
         # Try roll number / staff ID login
@@ -247,11 +247,11 @@ def login_view(request):
                 pass  # Skip if multiple matches
 
         if user is None:
-            messages.error(request, "Invalid credentials. Dobara try karo.")
+            messages.error(request, "Invalid credentials. Please try again.")
             return render(request, 'accounts/login.html')
 
         if not user.is_superuser and not user.is_active:
-            messages.error(request, "Account abhi approved nahi hua. Admin se contact karo.")
+            messages.error(request, "Account is not yet approved. Please contact admin.")
             return render(request, 'accounts/login.html')
 
         login(request, user)
@@ -282,7 +282,7 @@ def login_view(request):
 @require_POST
 def logout_view(request):
     logout(request)
-    messages.success(request, "Successfully logout ho gaye.")
+    messages.success(request, "Successfully logged out.")
     return redirect('login')
 
 
@@ -400,13 +400,13 @@ def approve_user(request, user_id):
 
     # BUG FIX: Don't approve already active user
     if user.is_active:
-        messages.warning(request, "Yeh user pehle se active hai.")
+        messages.warning(request, "This user is already active.")
         return redirect('pending_users')
 
     user.is_active = True
     user.save()
 
-    messages.success(request, f"'{user.username}' successfully approve ho gaya.")
+    messages.success(request, f"'{user.username}' successfully approved.")
     return redirect('pending_users')
 
 
@@ -421,13 +421,13 @@ def reject_user(request, user_id):
 
     # BUG FIX: Don't allow admin to delete themselves
     if user == request.user:
-        messages.error(request, "Aap apna account delete nahi kar sakte.")
+        messages.error(request, "You cannot delete your own account.")
         return redirect('pending_users')
 
     username = user.username
     user.delete()
 
-    messages.success(request, f"'{username}' ka account reject/delete ho gaya.")
+    messages.success(request, f"'{username}' has been rejected/deleted.")
     return redirect('pending_users')
 
 
