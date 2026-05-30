@@ -9,7 +9,7 @@
     <!-- HEADING -->
     <div class="text-center mb-4">
         <h2 class="text-white fw-bold">
-            📚 Pending Book Requests
+            📚 Book Requests
         </h2>
     </div>
 
@@ -18,20 +18,15 @@
 
         <!-- SEARCH -->
         <div class="position-relative mb-3">
-
-            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
-                🔍
-            </span>
-
+            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">🔍</span>
             <input type="text" id="searchRequest" class="form-control ps-5"
                 placeholder="Search student, book or status..." style="
-                        background: rgba(255,255,255,0.9);
-                        border: 1px solid rgba(0,0,0,0.1);
-                        border-radius: 12px;
-                        color: #000;
-                        height: 42px;
-                   ">
-
+                    background: rgba(255,255,255,0.9);
+                    border: 1px solid rgba(0,0,0,0.1);
+                    border-radius: 12px;
+                    color: #000;
+                    height: 42px;
+               ">
         </div>
 
         <!-- TABLE -->
@@ -40,89 +35,58 @@
             <table class="table table-hover align-middle" id="requestTable">
 
                 <thead class="table-dark">
-
                     <tr>
-
                         <th>Student</th>
-
                         <th>Book</th>
-
+                        <th>Requested At</th>
                         <th>Status</th>
-
                         <th>Action</th>
-
                     </tr>
-
                 </thead>
 
                 <tbody>
 
                     {% for req in requests %}
-
                     <tr>
 
-                        <td>
-                            {{ req.student.username }}
-                        </td>
+                        <td>{{ req.student.username }}</td>
+
+                        <td>{{ req.book.title }}</td>
+
+                        <td>{{ req.requested_at|date:"d M Y" }}</td>
 
                         <td>
-                            {{ req.book.title }}
-                        </td>
-
-                        <td>
-
                             {% if req.approved %}
-
-                            <span class="badge bg-success">
-                                Approved
-                            </span>
-
+                            <span class="badge bg-success">Approved</span>
                             {% else %}
-
-                            <span class="badge bg-warning text-dark">
-                                Pending
-                            </span>
-
+                            <span class="badge bg-warning text-dark">Pending</span>
                             {% endif %}
-
                         </td>
 
                         <td>
-
                             {% if not req.approved %}
-
-                            <a href="{% url 'approve_request' req.id %}" class="btn btn-success btn-sm">
-
-                                Approve
-
+                            <a href="{% url 'approve_request' req.id %}"
+                               class="btn btn-success btn-sm me-1">
+                                ✅ Approve
                             </a>
-
+                            {# FIX: Reject button add kiya — pehle sirf Approve tha #}
+                            <a href="{% url 'reject_request' req.id %}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Reject this request?')">
+                                ❌ Reject
+                            </a>
                             {% else %}
-
-                            <button class="btn btn-success btn-sm" disabled>
-
+                            <button class="btn btn-secondary btn-sm" disabled>
                                 Done
-
                             </button>
-
                             {% endif %}
-
                         </td>
 
                     </tr>
-
                     {% empty %}
-
                     <tr>
-
-                        <td colspan="4" class="text-center">
-
-                            No Pending Requests
-
-                        </td>
-
+                        <td colspan="5" class="text-center text-muted">No Requests Found</td>
                     </tr>
-
                     {% endfor %}
 
                 </tbody>
@@ -136,30 +100,16 @@
 </div>
 
 <style>
-    #searchRequest::placeholder {
-        color: #000;
-        opacity: 1;
-    }
+    #searchRequest::placeholder { color: #000; opacity: 1; }
 </style>
 
-<!-- SEARCH SCRIPT -->
 <script>
-
     document.getElementById("searchRequest").addEventListener("keyup", function () {
-
         let value = this.value.toLowerCase();
-
         document.querySelectorAll("#requestTable tbody tr").forEach(row => {
-
-            row.style.display =
-                row.innerText.toLowerCase().includes(value)
-                    ? ""
-                    : "none";
-
+            row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
         });
-
     });
-
 </script>
 
 {% endblock %}

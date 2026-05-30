@@ -8,84 +8,146 @@
 
     <!-- HEADER -->
     <div class="text-center mb-5">
+        <h2 class="fw-bold text-white display-6">Student Dashboard</h2>
+        <p class="text-light opacity-75">Welcome, {{ request.user.username }}</p>
+    </div>
 
-        <h2 class="fw-bold text-white display-6">
-            Student Dashboard
-        </h2>
+    <!-- STATS ROW -->
+    <div class="row g-4 mb-4 justify-content-center">
 
-        <p class="text-light opacity-75">
-            Welcome {{ request.user.username }}
-        </p>
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Total Books</h6>
+                <h2 class="text-primary fw-bold">{{ books_count }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Issued to Me</h6>
+                <h2 class="text-success fw-bold">{{ my_issued|length }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            {# FIX: Overdue count now shown to student #}
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Overdue</h6>
+                <h2 class="{% if overdue_count > 0 %}text-danger{% else %}text-success{% endif %} fw-bold">
+                    {{ overdue_count }}
+                </h2>
+            </div>
+        </div>
 
     </div>
 
     <!-- ACTION CARDS -->
-    <div class="row g-4 justify-content-center">
+    <div class="row g-4 justify-content-center mb-5">
 
-        <!-- VIEW BOOKS -->
         <div class="col-md-4">
-
             <a href="{% url 'book_list' %}" class="text-decoration-none">
-
                 <div class="glass-card p-4 text-center h-100">
-
-                    <h4 class="fw-bold text-primary">
-                        📚 View Books
-                    </h4>
-
-                    <p class="text-light opacity-75 mt-2">
-                        Browse all available books
-                    </p>
-
+                    <h4 class="fw-bold text-primary">📚 View Books</h4>
+                    <p class="text-light opacity-75 mt-2">Browse all available books</p>
                 </div>
-
             </a>
-
         </div>
 
-        <!-- REQUEST BOOK -->
         <div class="col-md-4">
-
             <a href="{% url 'request_book' %}" class="text-decoration-none">
-
                 <div class="glass-card p-4 text-center h-100">
-
-                    <h4 class="fw-bold text-warning">
-                        📖 Request Book
-                    </h4>
-
-                    <p class="text-light opacity-75 mt-2">
-                        Send request for books
-                    </p>
-
+                    <h4 class="fw-bold text-warning">📖 Request Book</h4>
+                    <p class="text-light opacity-75 mt-2">Send request for books</p>
                 </div>
-
             </a>
-
         </div>
 
-        <!-- RETURN STATUS -->
         <div class="col-md-4">
-
             <a href="{% url 'return_book' %}" class="text-decoration-none">
-
                 <div class="glass-card p-4 text-center h-100">
-
-                    <h4 class="fw-bold text-success">
-                        🔄 Return Status
-                    </h4>
-
-                    <p class="text-light opacity-75 mt-2">
-                        Check issued & returned books
-                    </p>
-
+                    <h4 class="fw-bold text-success">🔄 Return Status</h4>
+                    <p class="text-light opacity-75 mt-2">Check issued & returned books</p>
                 </div>
-
             </a>
-
         </div>
 
     </div>
+
+    <!-- MY ISSUED BOOKS -->
+    {% if my_issued %}
+    <div class="glass-card p-4 mb-4">
+        <h5 class="text-white mb-3">📘 My Currently Issued Books</h5>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Issue Date</th>
+                        <th>Return By</th>
+                        <th>Fine</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for issue in my_issued %}
+                    <tr>
+                        <td>{{ issue.book.title }}</td>
+                        <td>{{ issue.issue_date|date:"d M Y" }}</td>
+                        <td>{{ issue.return_date|date:"d M Y" }}</td>
+                        <td>
+                            {% if issue.fine > 0 %}
+                            <span class="text-danger fw-bold">Rs. {{ issue.fine }}</span>
+                            {% else %}
+                            <span class="text-success">None</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if issue.return_date < today %}
+                            <span class="badge bg-danger">Overdue</span>
+                            {% else %}
+                            <span class="badge bg-success">On Time</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- MY REQUESTS -->
+    {% if my_requests %}
+    <div class="glass-card p-4">
+        <h5 class="text-white mb-3">📋 My Book Requests</h5>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Requested</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in my_requests %}
+                    <tr>
+                        <td>{{ req.book.title }}</td>
+                        <td>{{ req.requested_at|date:"d M Y" }}</td>
+                        <td>
+                            {% if req.approved %}
+                            <span class="badge bg-success">Approved</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
 
 </div>
 
