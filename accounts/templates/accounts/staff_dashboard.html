@@ -7,102 +7,73 @@
 
     <!-- HEADER -->
     <div class="text-center mb-5">
+        <h2 class="fw-bold text-white display-6">Staff Dashboard</h2>
+        <p class="text-light opacity-75">Welcome {{ request.user.username }}</p>
+    </div>
 
-        <h2 class="fw-bold text-white display-6">
-            Staff Dashboard
-        </h2>
+    <!-- STATS ROW — FIX: total_issued aur pending_requests ab show honge -->
+    <div class="row g-4 mb-5 justify-content-center">
 
-        <p class="text-light opacity-75">
-            Welcome {{ request.user.username }}
-        </p>
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Total Books</h6>
+                <h2 class="text-primary fw-bold">{{ books_count }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Currently Issued</h6>
+                <h2 class="text-success fw-bold">{{ total_issued }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Pending Requests</h6>
+                <h2 class="text-warning fw-bold">{{ pending_requests }}</h2>
+            </div>
+        </div>
 
     </div>
 
     <!-- ACTION CARDS -->
     <div class="row g-4">
 
-        <!-- MANAGE BOOKS -->
         <div class="col-md-3">
-
             <a href="{% url 'book_list' %}" class="text-decoration-none">
-
                 <div class="glass-card p-4 text-center h-100">
-
-                    <h5 class="text-primary">
-                        📚 Manage Books
-                    </h5>
-
-                    <small class="text-light opacity-75">
-                        View, add and edit books
-                    </small>
-
+                    <h5 class="text-primary">📚 Manage Books</h5>
+                    <small class="text-light opacity-75">View, add and edit books</small>
                 </div>
-
             </a>
-
         </div>
 
-        <!-- ISSUE BOOK -->
         <div class="col-md-3">
-
             <a href="{% url 'issue_book' %}" class="text-decoration-none">
-
                 <div class="glass-card p-4 text-center h-100">
-
-                    <h5 class="text-success">
-                        📖 Issue Book
-                    </h5>
-
-                    <small class="text-light opacity-75">
-                        Assign books to students
-                    </small>
-
+                    <h5 class="text-success">📖 Issue Book</h5>
+                    <small class="text-light opacity-75">Assign books to students</small>
                 </div>
-
             </a>
-
         </div>
 
-        <!-- RETURN BOOK -->
         <div class="col-md-3">
-
             <a href="{% url 'return_book' %}" class="text-decoration-none">
-
                 <div class="glass-card p-4 text-center h-100">
-
-                    <h5 class="text-danger">
-                        🔄 Return Books
-                    </h5>
-
-                    <small class="text-light opacity-75">
-                        Manage returned books
-                    </small>
-
+                    <h5 class="text-danger">🔄 Return Books</h5>
+                    <small class="text-light opacity-75">Manage returned books</small>
                 </div>
-
             </a>
-
         </div>
 
-        <!-- BOOK REQUESTS -->
         <div class="col-md-3">
-
             <a href="{% url 'view_requests' %}" class="text-decoration-none">
-
                 <div class="glass-card p-4 text-center h-100">
-
-                    <h5 class="text-warning">
-                        📩 Book Requests
-                    </h5>
-
-                    <small class="text-light opacity-75">
-                        Approve student requests
-                    </small>
-
+                    <h5 class="text-warning">📩 Book Requests</h5>
+                    <small class="text-light opacity-75">Approve student requests</small>
                 </div>
-
             </a>
-
         </div>
 
     </div>

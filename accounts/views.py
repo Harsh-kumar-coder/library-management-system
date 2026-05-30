@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.utils import timezone
+from django.utils.timezone import now
 
 from books.models import Book, BookRequest, IssuedBook
 from .models import Profile
@@ -303,6 +304,8 @@ def admin_dashboard(request):
         return_date__lt=timezone.now().date()
     ).count()
 
+    today = timezone.now().date()
+
     return render(request, 'accounts/admin_dashboard.html', {
         'books_count': Book.objects.count(),
         'users_count': User.objects.count(),
@@ -310,6 +313,7 @@ def admin_dashboard(request):
         'pending_requests': pending_requests,
         'total_issued': total_issued,
         'overdue_count': overdue,
+        'today': today,
     })
 
 
@@ -352,6 +356,7 @@ def student_dashboard(request):
         'my_issued': my_issued,
         'my_requests': my_requests,
         'overdue_count': overdue,
+        'today': today,
     })
 
 

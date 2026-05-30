@@ -72,6 +72,9 @@
                         <td>
                             {% if issue.returned %}
                             <span class="badge bg-success">Returned</span>
+                            {% elif issue.return_date < today %}
+                            <!-- FIX: Overdue highlight using 'today' context var -->
+                            <span class="badge bg-danger">Overdue</span>
                             {% else %}
                             <span class="badge bg-warning text-dark">Issued</span>
                             {% endif %}

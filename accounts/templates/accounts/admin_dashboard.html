@@ -42,6 +42,23 @@
             </div>
         </div>
 
+        <!-- FIX: total_issued aur overdue_count ab admin dashboard mein dikh te hain -->
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Currently Issued</h6>
+                <h2 class="text-secondary fw-bold">{{ total_issued }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="glass-card p-4 text-center">
+                <h6 class="text-light opacity-75">Overdue Books</h6>
+                <h2 class="{% if overdue_count > 0 %}text-danger{% else %}text-success{% endif %} fw-bold">
+                    {{ overdue_count }}
+                </h2>
+            </div>
+        </div>
+
     </div>
 
     <!-- ACTION CARDS -->
