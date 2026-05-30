@@ -187,6 +187,65 @@
 
 </div>
 
+<!-- ADMIN TOOLS -->
+<div class="row mt-5">
+
+    <div class="col-lg-10 mx-auto">
+
+        <div class="glass-card p-4">
+
+            <h5 class="text-white mb-4">
+                Admin Tools
+            </h5>
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <a href="{% url 'contact_messages' %}"
+                       class="text-decoration-none">
+
+                        <div class="glass-card p-4 text-center h-100">
+
+                            <h5 class="text-info">
+                                📩 Contact Messages
+                            </h5>
+
+                            <small class="text-light opacity-75">
+                                View messages submitted from Contact Us page
+                            </small>
+
+                        </div>
+
+                    </a>
+                </div>
+
+                <div class="col-md-6">
+                    <a href="{% url 'donation_list' %}"
+                       class="text-decoration-none">
+
+                        <div class="glass-card p-4 text-center h-100">
+
+                            <h5 class="text-warning">
+                                💖 Donations
+                            </h5>
+
+                            <small class="text-light opacity-75">
+                                View all donation records and supporters
+                            </small>
+
+                        </div>
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 <!-- SEARCH SCRIPT -->
 <script>
     document.getElementById("userSearch").addEventListener("keyup", function () {

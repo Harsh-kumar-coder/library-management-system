@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.utils import timezone
 
 from .models import (
     Book,
     IssuedBook,
     BookRequest,
-    Donation
+    Donation,
+    ContactMessage
 )
 
 
@@ -376,8 +378,57 @@ def donate(request):
 
     return render(request, 'books/donate.html')
 
+# ---------------- DONATION LIST ----------------
+@login_required
+def donation_list(request):
+
+    if not request.user.is_superuser:
+        return redirect('login')
+
+    donations = Donation.objects.all().order_by('-created_at')
+
+    return render(
+        request,
+        'books/donation_list.html',
+        {'donations': donations}
+    )
 
 # ---------------- THANK YOU ----------------
 def thank_you(request):
 
     return render(request, 'books/thank_you.html')
+
+# ---------------- CONTACT ----------------
+def contact(request):
+
+    if request.method == "POST":
+
+        ContactMessage.objects.create(
+            name=request.POST.get('name'),
+            email=request.POST.get('email'),
+            subject=request.POST.get('subject'),
+            message=request.POST.get('message')
+        )
+        messages.success(
+            request,
+            "Your message has been sent successfully."
+        )
+
+        return redirect('contact')
+
+    return render(request, 'contact.html')
+
+# ---------------- CONTACT MESSAGES ----------------
+@login_required
+def contact_messages(request):
+
+    if not request.user.is_superuser:
+        return redirect('login')
+
+    messages = ContactMessage.objects.all().order_by('-created_at')
+
+    return render(
+        request,
+        'contact_messages.html',
+        {'messages': messages}
+    )

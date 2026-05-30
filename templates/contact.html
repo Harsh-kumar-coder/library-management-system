@@ -9,13 +9,13 @@ Contact Us
 
 {% include 'includes/public_navbar.html' %}
 
-<div class="container">
+<div class="container py-4">
 
     <!-- HEADER -->
     <div class="text-center mb-4">
 
         <h2 class="fw-bold text-warning">
-            Contact Us
+            📩 Contact Us
         </h2>
 
         <p class="text-light opacity-75">
@@ -24,9 +24,21 @@ Contact Us
 
     </div>
 
+    <!-- SUCCESS MESSAGE -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="row justify-content-center align-items-center g-4">
 
-        <!-- LEFT: FORM -->
+        <!-- LEFT : FORM -->
         <div class="col-lg-6">
 
             <div class="glass-card p-4">
@@ -36,32 +48,70 @@ Contact Us
                 </h4>
 
                 <form method="POST">
+
                     {% csrf_token %}
 
-                    <div class="mb-2">
-                        <label class="form-label text-light">Full Name</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="Enter your name" required>
-                    </div>
+                    <div class="mb-3">
 
-                    <div class="mb-2">
-                        <label class="form-label text-light">Email</label>
-                        <input type="email" class="form-control form-control-sm" placeholder="Enter your email"
-                            required>
-                    </div>
+                        <label class="form-label text-light">
+                            Full Name
+                        </label>
 
-                    <div class="mb-2">
-                        <label class="form-label text-light">Subject</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="Enter subject" required>
+                        <input type="text"
+                               name="name"
+                               class="form-control form-control-sm"
+                               placeholder="Enter your name"
+                               required>
+
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label text-light">Message</label>
-                        <textarea class="form-control form-control-sm" rows="3" placeholder="Write your message..."
-                            required></textarea>
+
+                        <label class="form-label text-light">
+                            Email
+                        </label>
+
+                        <input type="email"
+                               name="email"
+                               class="form-control form-control-sm"
+                               placeholder="Enter your email"
+                               required>
+
                     </div>
 
-                    <button class="btn btn-warning w-100 fw-bold btn-sm">
+                    <div class="mb-3">
+
+                        <label class="form-label text-light">
+                            Subject
+                        </label>
+
+                        <input type="text"
+                               name="subject"
+                               class="form-control form-control-sm"
+                               placeholder="Enter subject"
+                               required>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label text-light">
+                            Message
+                        </label>
+
+                        <textarea name="message"
+                                  rows="4"
+                                  class="form-control form-control-sm"
+                                  placeholder="Write your message..."
+                                  required></textarea>
+
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-warning w-100 fw-bold">
+
                         Send Message
+
                     </button>
 
                 </form>
@@ -70,18 +120,23 @@ Contact Us
 
         </div>
 
-        <!-- RIGHT: IMAGE -->
+        <!-- RIGHT : IMAGE -->
         <div class="col-lg-5 text-center">
 
-            <img src="{% static 'images/contact_team.png' %}" class="img-fluid"
-                style="max-height:420px; border-radius:15px;">
+            <img src="{% static 'images/contact_team.png' %}"
+                 class="img-fluid"
+                 style="
+                    max-height:420px;
+                    border-radius:15px;
+                    filter:drop-shadow(0 10px 25px rgba(0,0,0,0.4));
+                 ">
 
             <h5 class="text-light mt-3">
                 Team Support & Library Help
             </h5>
 
             <p class="text-light opacity-75">
-                Our team is always ready to assist students and staff.
+                Our team is always ready to assist students and staff with any library related issue.
             </p>
 
         </div>
@@ -89,7 +144,5 @@ Contact Us
     </div>
 
 </div>
-
-</section>
 
 {% endblock %}

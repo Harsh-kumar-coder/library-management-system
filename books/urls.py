@@ -46,9 +46,31 @@ urlpatterns = [
     ),
 
     path(
+        'donations/',
+        views.donation_list,
+        name='donation_list'
+    ),
+
+    path(
         'thank-you/',
         views.thank_you,
         name='thank_you'
     ),
-    path('pending-requests/', views.pending_requests_page, name='pending_requests'),
+
+    path('pending-requests/',
+          views.pending_requests_page,
+          name='pending_requests'
+        ),
+
+    path(
+        'contact/',
+        views.contact,
+        name='contact'
+    ),
+
+    path(
+        'contact-messages/',
+        views.contact_messages,
+        name='contact_messages'
+    ),
 ]
