@@ -10,37 +10,41 @@ Donation List
 
 <div class="container py-4">
 
+    <!-- HEADER -->
     <div class="text-center mb-4">
 
         <h2 class="text-white fw-bold">
             💖 Donation List
         </h2>
 
+        <p class="text-light opacity-75 small">
+            All received contributions from supporters
+        </p>
+
     </div>
 
-    <div class="card shadow-lg border-0 p-4"
-         style="border-radius:20px;">
+    <!-- MAIN CARD -->
+    <div class="glass-card p-4 shadow-lg">
 
-        <!-- FIX: Total donations amount summary -->
+        <!-- TOTAL AMOUNT -->
         {% if total %}
-        <div class="alert alert-success mb-3">
-            <strong>💰 Total Donations Received: ₹{{ total }}</strong>
+        <div class="alert alert-success mb-3 fw-semibold">
+            💰 Total Donations Received: ₹{{ total }}
         </div>
         {% endif %}
 
+        <!-- TABLE -->
         <div class="table-responsive">
 
-            <table class="table table-hover align-middle">
+            <table class="table table-hover align-middle text-white">
 
-                <thead class="table-dark">
-
+                <thead>
                     <tr>
                         <th>Name</th>
                         <th>Amount</th>
                         <th>Message</th>
                         <th>Date</th>
                     </tr>
-
                 </thead>
 
                 <tbody>
@@ -49,24 +53,32 @@ Donation List
 
                     <tr>
 
-                        <td>{{ donation.name }}</td>
+                        <td class="fw-semibold">
+                            {{ donation.name }}
+                        </td>
 
-                        <td>₹{{ donation.amount }}</td>
+                        <td>
+                            <span class="badge bg-success px-3 py-2">
+                                ₹{{ donation.amount }}
+                            </span>
+                        </td>
 
-                        <td>{{ donation.message }}</td>
+                        <td>
+                            {{ donation.message }}
+                        </td>
 
-                        <td>{{ donation.created_at|date:"d M Y H:i" }}</td>
+                        <td>
+                            {{ donation.created_at|date:"d M Y H:i" }}
+                        </td>
 
                     </tr>
 
                     {% empty %}
 
                     <tr>
-
-                        <td colspan="4" class="text-center">
+                        <td colspan="4" class="text-center text-light opacity-75">
                             No Donations Found
                         </td>
-
                     </tr>
 
                     {% endfor %}

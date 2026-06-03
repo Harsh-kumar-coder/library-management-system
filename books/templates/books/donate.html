@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Donate Us{% endblock %}
+{% block title %}Support Our Library{% endblock %}
 
 {% block content %}
 
 {% include 'includes/public_navbar.html' %}
 
-<div class="container">
+<div class="container py-5">
 
     <!-- HEADER -->
-    <div class="text-center mb-4">
+    <div class="text-center mb-5">
 
-        <h2 class="fw-bold text-warning">
-            💖 Support Library
-        </h2>
+        <span class="hero-badge">
+            Support Education
+        </span>
+        
+        <h1 class="fw-bold text-warning">
+            💖 Support Our Library
+        </h1>
 
-        <p class="text-light opacity-75">
-            Your small contribution helps students learn better
+        <p class="text-light opacity-75 fs-5">
+            Every contribution helps us improve learning resources for students.
         </p>
 
     </div>
@@ -36,26 +40,32 @@
                 <form method="POST">
                     {% csrf_token %}
 
-                    <div class="mb-2">
-                        <label class="form-label text-light">Your Name</label>
-                        <input type="text" name="name" class="form-control form-control-sm"
-                            placeholder="Enter your name">
-                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-light">
+                            Full Name
+                        </label>
 
-                    <div class="mb-2">
-                        <label class="form-label text-light">Amount</label>
-                        <input type="number" name="amount" class="form-control form-control-sm"
-                            placeholder="Enter amount" required>
+                        <input type="text" name="name" class="form-control" placeholder="Enter your name">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label text-light">Message</label>
-                        <textarea name="message" rows="3" class="form-control form-control-sm"
-                            placeholder="Optional message"></textarea>
+                        <label class="form-label text-light">
+                            Donation Amount (₹)
+                        </label>
+
+                        <input type="number" name="amount" class="form-control" placeholder="Enter amount" required>
                     </div>
 
-                    <button type="submit" class="btn btn-warning w-100 fw-bold btn-sm">
-                        Submit Donation
+                    <div class="mb-3">
+                        <label class="form-label text-light">
+                            Message (Optional)
+                        </label>
+
+                        <textarea name="message" rows="4" class="form-control" placeholder="Write a message"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 fw-bold">
+                        Submit Details
                     </button>
 
                 </form>
@@ -64,25 +74,43 @@
 
         </div>
 
-        <!-- QR SECTION -->
-        <div class="col-lg-4">
+        <!-- QR & INFO -->
+        <div class="col-lg-5">
 
-            <div class="glass-card p-4 text-center h-100">
+            <div class="glass-card p-4 text-center">
 
-                <h5 class="text-warning mb-3">
+                <h4 class="text-warning mb-3">
                     📱 Scan & Pay
-                </h5>
+                </h4>
 
                 <img src="{% static 'images/qr.png' %}" class="img-fluid mb-3"
-                    style="max-width:220px; border-radius:12px;">
+                    style="max-width:240px;border-radius:15px;">
 
                 <p class="text-light mb-1">
-                    UPI Payment
+                    UPI ID
                 </p>
 
-                <h6 class="text-white">
-                    kumarharsh09374-1@oksbi
+                <h6 class="text-white mb-4">
+                    8114512688@sbi
                 </h6>
+
+                <hr class="text-secondary">
+
+                <div class="text-start">
+
+                    <p class="text-light mb-2">
+                        ✅ Support student learning
+                    </p>
+
+                    <p class="text-light mb-2">
+                        ✅ Improve library resources
+                    </p>
+
+                    <p class="text-light mb-0">
+                        ✅ Help maintain the project
+                    </p>
+
+                </div>
 
             </div>
 
@@ -91,7 +119,5 @@
     </div>
 
 </div>
-
-</section>
 
 {% endblock %}

@@ -2,9 +2,14 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-demo'
+SECRET_KEY = '7m@kL#9pQ!2xR$8nV^4zB&1cY^6tF*wD'
+
 DEBUG = True
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -13,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'accounts',
     'books',
 ]
@@ -69,6 +75,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
+
 TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
@@ -80,15 +87,14 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGIN_REDIRECT_URL = 'login'
-LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'admin@college.com'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Session Settings
 SESSION_COOKIE_AGE = 86400
-
 SESSION_SAVE_EVERY_REQUEST = True

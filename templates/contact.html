@@ -9,42 +9,39 @@ Contact Us
 
 {% include 'includes/public_navbar.html' %}
 
-<div class="container">
+<div class="container py-5">
 
     <!-- HEADER -->
-    <div class="text-center mb-4">
 
-        <h2 class="fw-bold text-warning">
-            📩 Contact Us
+    <div class="text-center mb-5">
+
+        <span class="hero-badge">
+            Get In Touch
+        </span>
+
+        <h2 class="fw-bold text-warning mt-3">
+            Contact Us
         </h2>
 
         <p class="text-light opacity-75">
-            We are here to help you anytime
+            Have questions or need assistance? We'd love to hear from you.
         </p>
 
     </div>
 
-    <!-- SUCCESS MESSAGE -->
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
-
     <div class="row justify-content-center align-items-center g-4">
 
-        <!-- LEFT : FORM -->
+        <!-- LEFT : CONTACT FORM -->
+
         <div class="col-lg-6">
 
             <div class="glass-card p-4">
 
                 <h4 class="text-white text-center mb-4">
+
+                    <i class="fa-solid fa-paper-plane me-2"></i>
                     Send Message
+
                 </h4>
 
                 <form method="POST">
@@ -68,7 +65,7 @@ Contact Us
                     <div class="mb-3">
 
                         <label class="form-label text-light">
-                            Email
+                            Email Address
                         </label>
 
                         <input type="email"
@@ -110,6 +107,7 @@ Contact Us
                     <button type="submit"
                             class="btn btn-warning w-100 fw-bold">
 
+                        <i class="fa-solid fa-paper-plane me-2"></i>
                         Send Message
 
                     </button>
@@ -120,24 +118,62 @@ Contact Us
 
         </div>
 
-        <!-- RIGHT : IMAGE -->
+        <!-- RIGHT : IMAGE & CONTACT INFO -->
+
         <div class="col-lg-5 text-center">
 
-            <img src="{% static 'images/contact_team.png' %}"
+            <img src="{% static 'images/team.png' %}"
                  class="img-fluid"
+                 alt="Contact Team"
                  style="
                     max-height:420px;
-                    border-radius:15px;
+                    border-radius:20px;
                     filter:drop-shadow(0 10px 25px rgba(0,0,0,0.4));
                  ">
 
-            <h5 class="text-light mt-3">
+            <h5 class="text-light mt-4">
                 Team Support & Library Help
             </h5>
 
             <p class="text-light opacity-75">
-                Our team is always ready to assist students and staff with any library related issue.
+                Our team is always ready to assist students and staff with
+                any library related issues or queries.
             </p>
+
+            <!-- CONTACT INFO -->
+
+            <div class="glass-card p-3 mt-4 text-start">
+
+                <p class="text-light mb-2">
+
+                    <i class="fa-solid fa-envelope text-warning me-2"></i>
+
+                    <a href="mailto:kumarharsh09374@gmail.com"
+                       class="text-light text-decoration-none">
+
+                        kumarharsh09374@gmail.com
+
+                    </a>
+
+                </p>
+
+                <p class="text-light mb-2">
+
+                    <i class="fa-solid fa-globe text-warning me-2"></i>
+
+                    Library Management System
+
+                </p>
+
+                <p class="text-light mb-0">
+
+                    <i class="fa-solid fa-location-dot text-warning me-2"></i>
+
+                    India
+
+                </p>
+
+            </div>
 
         </div>
 

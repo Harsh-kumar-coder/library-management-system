@@ -6,44 +6,38 @@
 
 <div class="container py-5">
 
-    <!-- HEADING -->
+    <!-- HEADER -->
     <div class="text-center mb-4">
-        <h2 class="text-white fw-bold">
-            📚 Manage Books
-        </h2>
+        <h2 class="text-white fw-bold">📚 Manage Books</h2>
+        <p class="text-light opacity-75 small">
+            View, search and manage all library books
+        </p>
     </div>
 
-    <!-- CARD -->
-    <div class="card shadow-lg border-0 p-4" style="border-radius:20px;">
+    <!-- MAIN CARD -->
+    <div class="glass-card p-4">
 
         <!-- TOP BAR -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
 
             <!-- SEARCH -->
-            <div class="position-relative w-75">
+            <div class="position-relative flex-grow-1">
 
-                <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-light opacity-75">
                     🔍
                 </span>
 
-                <input type="text" id="bookSearch" class="form-control ps-5"
-                    placeholder="Search title, author or ISBN..." style="
-                            background: rgba(255,255,255,0.6);
-                            border: 1px solid rgba(0,0,0,0.1);
-                            border-radius: 12px;
-                            color: #000;
-                            height: 42px;
-                       ">
+                <input type="text" id="bookSearch"
+                       class="form-control ps-5"
+                       placeholder="Search title, author or ISBN...">
 
             </div>
 
             <!-- ADD BUTTON -->
             {% if request.user.is_superuser or request.user.profile.role == 'staff' %}
 
-            <a href="{% url 'add_book' %}" class="btn btn-success ms-3">
-
+            <a href="{% url 'add_book' %}" class="btn btn-success px-4">
                 + Add Book
-
             </a>
 
             {% endif %}
@@ -53,30 +47,21 @@
         <!-- TABLE -->
         <div class="table-responsive">
 
-            <table class="table table-hover align-middle" id="booksTable">
+            <table class="table table-hover align-middle text-white" id="booksTable">
 
-                <thead class="table-dark">
-
+                <thead>
                     <tr>
-
                         <th>ID</th>
-
                         <th>Title</th>
-
                         <th>Author</th>
-
                         <th>ISBN</th>
-
-                        <th>Quantity</th>
-
-                        <th>Added At</th>
+                        <th>Qty</th>
+                        <th>Added</th>
 
                         {% if request.user.is_superuser or request.user.profile.role == 'staff' %}
                         <th>Action</th>
                         {% endif %}
-
                     </tr>
-
                 </thead>
 
                 <tbody>
@@ -87,7 +72,12 @@
 
                         <td>{{ book.id }}</td>
 
-                        <td>{{ book.title }}</td>
+                        <!-- FIX: BOOK DETAIL LINK -->
+                        <td>
+                            <a href="{% url 'book_detail' book.id %}" class="fw-bold text-decoration-none">
+                                {{ book.title }}
+                            </a>
+                        </td>
 
                         <td>{{ book.author }}</td>
 
@@ -95,22 +85,18 @@
 
                         <td>{{ book.quantity }}</td>
 
-                        <td>{{ book.added_at }}</td>
+                        <td>{{ book.added_at|date:"d M Y" }}</td>
 
                         {% if request.user.is_superuser or request.user.profile.role == 'staff' %}
 
-                        <td>
+                        <td class="text-nowrap">
 
-                            <a href="{% url 'edit_book' book.id %}" class="btn btn-primary btn-sm">
-
+                            <a href="{% url 'edit_book' book.id %}" class="btn btn-sm btn-primary">
                                 Edit
-
                             </a>
 
-                            <a href="{% url 'delete_book' book.id %}" class="btn btn-danger btn-sm">
-
+                            <a href="{% url 'delete_book' book.id %}" class="btn btn-sm btn-danger">
                                 Delete
-
                             </a>
 
                         </td>
@@ -122,13 +108,9 @@
                     {% empty %}
 
                     <tr>
-
-                        <td colspan="7" class="text-center">
-
+                        <td colspan="7" class="text-center text-light opacity-75">
                             No Books Found
-
                         </td>
-
                     </tr>
 
                     {% endfor %}
@@ -139,28 +121,42 @@
 
         </div>
 
+        <!-- PAGINATION -->
+        <div class="mt-4 text-center">
+
+            {% if books.has_previous %}
+                <a href="?page={{ books.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
+                   class="btn btn-sm btn-outline-light me-2">
+                    Prev
+                </a>
+            {% endif %}
+
+            <span class="text-white mx-2">
+                Page {{ books.number }} of {{ books.paginator.num_pages }}
+            </span>
+
+            {% if books.has_next %}
+                <a href="?page={{ books.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
+                   class="btn btn-sm btn-outline-light ms-2">
+                    Next
+                </a>
+            {% endif %}
+
+        </div>
+
     </div>
 
 </div>
 
 <!-- SEARCH SCRIPT -->
 <script>
+document.getElementById("bookSearch").addEventListener("keyup", function () {
+    let value = this.value.toLowerCase();
 
-    document.getElementById("bookSearch").addEventListener("keyup", function () {
-
-        let value = this.value.toLowerCase();
-
-        document.querySelectorAll("#booksTable tbody tr").forEach(row => {
-
-            row.style.display =
-                row.innerText.toLowerCase().includes(value)
-                    ? ""
-                    : "none";
-
-        });
-
+    document.querySelectorAll("#booksTable tbody tr").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
     });
-
+});
 </script>
 
 {% endblock %}

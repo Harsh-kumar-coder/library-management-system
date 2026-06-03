@@ -9,41 +9,64 @@ About Us
 
 {% include 'includes/public_navbar.html' %}
 
-<div class="container">
+<div class="container py-5">
 
     <!-- HEADER -->
+
     <div class="text-center mb-5">
 
-        <h1 class="fw-bold text-warning">
+        <span class="hero-badge">
+            Meet Our Team
+        </span>
+
+        <h1 class="fw-bold text-warning mt-3">
             About Our Project
         </h1>
 
-        <p class="text-light fs-5 opacity-75">
-            We are a team of 4 students building a Library Management System
+        <p class="text-light opacity-75 mx-auto"
+           style="max-width:700px;">
+
+            A modern Library Management System developed by a dedicated team
+            to simplify book management, user access and library operations.
+
         </p>
 
     </div>
 
     <!-- TEAM -->
+
     <div class="row g-4">
 
         <!-- MEMBER 1 -->
-        <div class="col-md-3">
+
+        <div class="col-lg-3 col-md-6">
 
             <div class="team-card text-center p-4 h-100">
 
-                <img src="{% static 'images/user1.jpg' %}" class="team-img mb-3"
-                    style="object-fit:cover; object-position:top;">
+                <img src="{% static 'images/nikhil.jpg' %}"
+                     class="team-img mb-3"
+                     style="object-fit:cover; object-position:top;">
 
-                <h5 class="fw-bold">Nikhil Kumar</h5>
-                <span class="role-badge">Full Stack Developer</span>
+                <h5 class="fw-bold mb-2">
+                    Nikhil Kumar
+                </h5>
 
-                <p class="text-muted small">
-                    Authentication system, dashboard & UI design.
+                <span class="role-badge">
+                    <i class="fa-solid fa-code me-1"></i>
+                    Full Stack Developer
+                </span>
+
+                <p class="text-muted small mt-3">
+                    Authentication system, dashboard development and UI design.
                 </p>
 
-                <a href="https://github.com/" target="_blank" class="btn btn-dark btn-sm w-100 mt-2">
+                <a href="https://github.com/"
+                   target="_blank"
+                   class="btn btn-premium btn-sm w-100 mt-2">
+
+                    <i class="fa-brands fa-github me-2"></i>
                     View Profile
+
                 </a>
 
             </div>
@@ -51,22 +74,35 @@ About Us
         </div>
 
         <!-- MEMBER 2 -->
-        <div class="col-md-3">
+
+        <div class="col-lg-3 col-md-6">
 
             <div class="team-card text-center p-4 h-100">
 
-                <img src="{% static 'images/user2.jpg' %}" class="team-img mb-3"
-                    style="object-fit:cover; object-position:top;">
+                <img src="{% static 'images/harsh.jpg' %}"
+                     class="team-img mb-3"
+                     style="object-fit:cover; object-position:top;">
 
-                <h5 class="fw-bold">Harsh Kumar</h5>
-                <span class="role-badge">Backend Developer</span>
+                <h5 class="fw-bold mb-2">
+                    Harsh Kumar
+                </h5>
 
-                <p class="text-muted small">
-                    Database structure & backend logic.
+                <span class="role-badge">
+                    <i class="fa-solid fa-database me-1"></i>
+                    Backend Developer
+                </span>
+
+                <p class="text-muted small mt-3">
+                    Database architecture, backend logic and system integration.
                 </p>
 
-                <a href="https://github.com/Harsh-kumar-coder/" target="_blank" class="btn btn-dark btn-sm w-100 mt-2">
+                <a href="https://github.com/Harsh-kumar-coder/"
+                   target="_blank"
+                   class="btn btn-premium btn-sm w-100 mt-2">
+
+                    <i class="fa-brands fa-github me-2"></i>
                     View Profile
+
                 </a>
 
             </div>
@@ -74,22 +110,34 @@ About Us
         </div>
 
         <!-- MEMBER 3 -->
-        <div class="col-md-3">
+
+        <div class="col-lg-3 col-md-6">
 
             <div class="team-card text-center p-4 h-100">
 
-                <img src="{% static 'images/user3.jpg' %}" class="team-img mb-3">
+                <img src="{% static 'images/abhishek.jpg' %}"
+                     class="team-img mb-3">
 
-                <h5 class="fw-bold">Abhishek Kumar</h5>
-                <span class="role-badge">Frontend Designer</span>
+                <h5 class="fw-bold mb-2">
+                    Abhishek Kumar
+                </h5>
 
-                <p class="text-muted small">
-                    Responsive UI, forms & animations.
+                <span class="role-badge">
+                    <i class="fa-solid fa-palette me-1"></i>
+                    Frontend Designer
+                </span>
+
+                <p class="text-muted small mt-3">
+                    Responsive layouts, animations and user interface design.
                 </p>
 
-                <a href="https://www.instagram.com/its_abhishek__.singh" target="_blank"
-                    class="btn btn-dark btn-sm w-100 mt-2">
+                <a href="https://www.instagram.com/its_abhishek__.singh"
+                   target="_blank"
+                   class="btn btn-premium btn-sm w-100 mt-2">
+
+                    <i class="fa-brands fa-instagram me-2"></i>
                     View Profile
+
                 </a>
 
             </div>
@@ -97,21 +145,34 @@ About Us
         </div>
 
         <!-- MEMBER 4 -->
-        <div class="col-md-3">
+
+        <div class="col-lg-3 col-md-6">
 
             <div class="team-card text-center p-4 h-100">
 
-                <img src="{% static 'images/user4.jpg' %}" class="team-img mb-3">
+                <img src="{% static 'images/gaurav.jpg' %}"
+                     class="team-img mb-3">
 
-                <h5 class="fw-bold">Gaurav Kumar</h5>
-                <span class="role-badge">Testing & Docs</span>
+                <h5 class="fw-bold mb-2">
+                    Gaurav Singh
+                </h5>
 
-                <p class="text-muted small">
-                    Testing, bug fixing & documentation.
+                <span class="role-badge">
+                    <i class="fa-solid fa-shield-halved me-1"></i>
+                    Testing & Documentation
+                </span>
+
+                <p class="text-muted small mt-3">
+                    Quality assurance, bug testing and project documentation.
                 </p>
 
-                <a href="https://github.com/" target="_blank" class="btn btn-dark btn-sm w-100 mt-2">
+                <a href="https://github.com/"
+                   target="_blank"
+                   class="btn btn-premium btn-sm w-100 mt-2">
+
+                    <i class="fa-brands fa-github me-2"></i>
                     View Profile
+
                 </a>
 
             </div>
@@ -121,7 +182,5 @@ About Us
     </div>
 
 </div>
-
-</section>
 
 {% endblock %}

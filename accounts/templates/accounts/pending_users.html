@@ -6,55 +6,47 @@
 
 <div class="container py-4">
 
-    <!-- HEADING -->
+    <!-- HEADER -->
     <div class="text-center mb-4">
 
         <h2 class="text-white fw-bold">
             👥 Pending Users
         </h2>
 
+        <p class="text-light opacity-75 small">
+            Approve or reject new registrations
+        </p>
+
     </div>
 
-    <!-- CARD -->
-    <div class="card shadow-lg border-0 p-4" style="border-radius:20px;">
+    <!-- MAIN CARD -->
+    <div class="glass-card p-4 shadow-lg">
 
         <!-- SEARCH -->
-        <div class="position-relative mb-3">
+        <div class="position-relative mb-4">
 
-            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" style="z-index:10;">
+            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-light opacity-75">
                 🔍
             </span>
 
-            <input type="text" id="searchUser" class="form-control ps-5" placeholder="Search username, email or role..."
-                style="
-                        background: rgba(255,255,255,0.9);
-                        border: 1px solid rgba(0,0,0,0.1);
-                        border-radius: 12px;
-                        color: #000;
-                        height: 42px;
-                   ">
-
+            <input type="text" id="searchUser"
+                   class="form-control ps-5"
+                   placeholder="Search username, email or role..."
+                   style="border-radius:12px;">
         </div>
 
         <!-- TABLE -->
         <div class="table-responsive">
 
-            <table class="table table-hover align-middle" id="usersTable">
+            <table class="table table-hover align-middle text-white" id="usersTable">
 
-                <thead class="table-dark">
-
+                <thead>
                     <tr>
-
                         <th>Username</th>
-
                         <th>Email</th>
-
                         <th>Role</th>
-
                         <th>Action</th>
-
                     </tr>
-
                 </thead>
 
                 <tbody>
@@ -63,7 +55,7 @@
 
                     <tr>
 
-                        <td>
+                        <td class="fw-semibold">
                             {{ user.username }}
                         </td>
 
@@ -74,39 +66,28 @@
                         <td>
 
                             {% if user.is_superuser %}
-
-                            <span class="badge bg-danger">
-                                Admin
-                            </span>
+                                <span class="badge bg-danger px-3 py-2">Admin</span>
 
                             {% elif user.is_staff %}
-
-                            <span class="badge bg-primary">
-                                Staff
-                            </span>
+                                <span class="badge bg-primary px-3 py-2">Staff</span>
 
                             {% else %}
-
-                            <span class="badge bg-success">
-                                Student
-                            </span>
-
+                                <span class="badge bg-success px-3 py-2">Student</span>
                             {% endif %}
 
                         </td>
 
-                        <td>
+                        <td class="text-nowrap">
 
-                            <a href="{% url 'approve_user' user.id %}" class="btn btn-success btn-sm">
-
+                            <a href="{% url 'approve_user' user.id %}"
+                               class="btn btn-sm btn-success">
                                 Approve
-
                             </a>
 
-                            <a href="{% url 'reject_user' user.id %}" class="btn btn-danger btn-sm">
-
+                            <a href="{% url 'reject_user' user.id %}"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('Reject this user?')">
                                 Reject
-
                             </a>
 
                         </td>
@@ -116,13 +97,9 @@
                     {% empty %}
 
                     <tr>
-
-                        <td colspan="4" class="text-center">
-
+                        <td colspan="4" class="text-center text-light opacity-75">
                             No Pending Users
-
                         </td>
-
                     </tr>
 
                     {% endfor %}
@@ -137,36 +114,15 @@
 
 </div>
 
-<style>
-    #searchUser::placeholder {
-        color: rgba(0, 0, 0, 0.6);
-    }
-
-    #searchUser:focus {
-        outline: none;
-        border-color: #764ba2;
-        box-shadow: 0 0 8px rgba(118, 75, 162, 0.3);
-    }
-</style>
-
 <!-- SEARCH SCRIPT -->
 <script>
+document.getElementById("searchUser").addEventListener("keyup", function () {
+    let value = this.value.toLowerCase();
 
-    document.getElementById("searchUser").addEventListener("keyup", function () {
-
-        let value = this.value.toLowerCase();
-
-        document.querySelectorAll("#usersTable tbody tr").forEach(row => {
-
-            row.style.display =
-                row.innerText.toLowerCase().includes(value)
-                    ? ""
-                    : "none";
-
-        });
-
+    document.querySelectorAll("#usersTable tbody tr").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
     });
-
+});
 </script>
 
 {% endblock %}

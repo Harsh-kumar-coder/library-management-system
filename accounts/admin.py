@@ -8,7 +8,7 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_display = (
         'username',
         'email',
-        'first_name',
+        'get_id_value',
         'is_active',
         'is_staff',
         'is_superuser',
@@ -24,12 +24,14 @@ class CustomUserAdmin(admin.ModelAdmin):
         'username',
         'email',
         'first_name',
-        'last_name',
     )
 
-    ordering = (
-        'username',
-    )
+    ordering = ('username',)
+
+    def get_id_value(self, obj):
+        return obj.first_name
+
+    get_id_value.short_description = "Roll No / Staff ID"
 
 
 @admin.register(Profile)
@@ -38,6 +40,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'role',
+        'user_id_value',
     )
 
     list_filter = (
@@ -48,6 +51,11 @@ class ProfileAdmin(admin.ModelAdmin):
         'user__username',
         'user__email',
     )
+
+    def user_id_value(self, obj):
+        return obj.user.first_name
+
+    user_id_value.short_description = "Roll No / Staff ID"
 
 
 admin.site.unregister(User)

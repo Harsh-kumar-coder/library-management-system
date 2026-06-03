@@ -18,33 +18,51 @@
 
             <ul class="navbar-nav ms-auto align-items-center">
 
+                <!-- HOME -->
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">
-                        Home
+                        <i class="fa-solid fa-house"></i> Home
                     </a>
                 </li>
+
+                <!-- ABOUT -->
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'about' %}">
-                        About
+                        <i class="fa-solid fa-book-open"></i> About
                     </a>
                 </li>
+
+                <!-- CONTACT -->
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'contact' %}">
-                        Contact
+                        <i class="fa-solid fa-comments"></i> Contact
                     </a>
                 </li>
+
+                <!-- DONATE -->
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'donate' %}">
-                        Donate us
+                        <i class="fa-solid fa-hand-holding-heart"></i> Donate us
                     </a>
                 </li>
 
+                <!-- LOGIN -->
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">
+                        <i class="fa fa-sign-in-alt me-1"></i> Login
+                    </a>
+                </li>
+
+                <!-- REGISTER -->
+
                 <li class="nav-item ms-2">
-                    <a class="btn btn-warning btn-sm px-3" href="{% url 'login' %}">
-                        Get Started
+                    <a class="btn btn-success btn-sm px-3 text-white" href="{% url 'select_role' %}">
+                        <i class="fa fa-user-plus me-1"></i> Register
                     </a>
                 </li>
 

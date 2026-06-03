@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Book Details
+{% endblock %}
+
+{% block content %}
+
+{% include 'includes/dashboard_navbar.html' %}
+
+<div class="container py-5">
+
+    <div class="glass-card p-4 mx-auto shadow-lg" style="max-width:550px; border-radius:18px;">
+
+        <!-- ICON -->
+        <div class="text-center mb-2">
+            <i class="fa-solid fa-book-open fa-3x text-success"></i>
+        </div>
+
+        <!-- TITLE -->
+        <h4 class="text-center text-white fw-bold mb-1">
+            {{ book.title }}
+        </h4>
+
+        <p class="text-center text-light opacity-75 small mb-3">
+            Book Details
+        </p>
+
+        <hr style="border-color: rgba(255,255,255,0.15);">
+
+        <!-- INFO -->
+        <div class="glass-card p-3 mb-2">
+            <small class="text-light opacity-75">Author</small>
+            <div class="text-white fw-semibold">{{ book.author }}</div>
+        </div>
+
+        <div class="glass-card p-3 mb-2">
+            <small class="text-light opacity-75">ISBN</small>
+            <div class="text-white fw-semibold">{{ book.isbn }}</div>
+        </div>
+
+        <div class="row g-2">
+
+            <div class="col-6">
+                <div class="glass-card p-3 text-center">
+                    <small class="text-light opacity-75">Qty</small>
+                    <div class="text-success fw-bold">{{ book.quantity }}</div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="glass-card p-3 text-center">
+
+                    <small class="text-light opacity-75">Status</small>
+
+                    {% if book.quantity > 0 %}
+                    <div class="badge bg-success mt-1">Available</div>
+                    {% else %}
+                    <div class="badge bg-danger mt-1">Out</div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+        <div class="d-grid gap-2 mt-4">
+
+            {% if book.quantity > 0 %}
+
+            {% if request.user.is_superuser or request.user.profile.role == 'staff' %}
+
+            <!-- ADMIN / STAFF -->
+            <a href="{% url 'issue_book' %}?book_id={{ book.id }}" class="btn btn-success w-100 mt-3">
+                📚 Issue This Book
+            </a>
+
+            {% else %}
+
+            <!-- STUDENT -->
+            <a href="{% url 'request_book' %}?book_id={{ book.id }}" class="btn btn-warning w-100 mt-3">
+                📖 Request This Book
+            </a>
+
+            {% endif %}
+
+            {% endif %}
+
+            <!-- BACK BUTTON -->
+            <a href="{% url 'book_list' %}" class="btn btn-outline-light">
+                ← Back
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

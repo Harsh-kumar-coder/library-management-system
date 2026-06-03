@@ -130,8 +130,8 @@ body::after {
 .navbar {
     position: fixed;
     top: 0;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     left: 0;
     width: 100%;
     z-index: 1000;
@@ -181,6 +181,12 @@ body::after {
         0 15px 40px rgba(0, 0, 0, .25),
         inset 0 1px 0 rgba(255, 255, 255, .08);
     transition: .3s;
+    cursor: pointer;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .35);
 }
 
 /* TEAM CARD STYLE */
@@ -195,7 +201,7 @@ body::after {
 
 
 .team-card:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-4px) scale(1.02);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
 }
 
@@ -402,6 +408,12 @@ footer {
     text-decoration: none;
     padding: 14px 32px;
     border-radius: 16px;
+}
+
+.hero-outline-btn:hover {
+    transform: translateY(-3px) scale(1.00);
+    color: #fff;
+    box-shadow: 0 20px 45px rgba(99, 102, 241, .45);
 }
 
 .hero-stats {
@@ -644,4 +656,145 @@ footer {
         gap: 15px;
     }
 
+}
+
+/*  */
+
+.login-wrapper {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+
+.login-card {
+    max-width: 480px;
+    width: 100%;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    transition: 0.3s;
+}
+
+
+.login-card:hover {
+    transform: translateY(-3px);
+}
+
+
+.login-title {
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+}
+
+
+.login-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    font-size: 14px;
+}
+
+
+.input-group-text {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #fff;
+}
+
+
+.form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+}
+
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: none;
+    color: #fff;
+}
+
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+.btn-login {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+
+.btn-login:hover {
+    transform: scale(1.02);
+    opacity: 0.95;
+}
+
+.team-card {
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    transition: 0.3s ease;
+    color: #fff;
+}
+
+.team-card:hover {
+    transform: translateY(-3px) scale(1.00);
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.4),
+        0 0 25px rgba(139, 92, 246, 0.2);
+}
+
+.text-muted {
+    color: rgba(255, 255, 255, 0.80) !important;
+}
+
+.btn-premium {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    color: #fff;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+.btn-premium:hover {
+    transform: scale(1.03);
+    opacity: 0.9;
+    color: #fff;
+}
+
+/* profile avatar */
+.profile-avatar{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:#f59e0b;
+    color:#fff;
+    font-size:28px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
 }

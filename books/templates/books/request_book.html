@@ -6,33 +6,31 @@
 
 <div class="container py-5">
 
-    <!-- HEADING -->
+    <!-- HEADER -->
     <div class="text-center mb-4">
         <h2 class="text-white fw-bold">📖 Request Book</h2>
-        <p class="text-light opacity-75">
-            Maximum 2 books allowed
+        <p class="text-light opacity-75 small">
+            Maximum 2 books allowed per user
         </p>
     </div>
 
-    <!-- CARD -->
-    <div class="card shadow-lg border-0 p-4 mx-auto" style="
-            max-width:550px;
-            border-radius:20px;
-            background:#ffeef5;
-         ">
+    <!-- REQUEST FORM CARD -->
+    <div class="glass-card p-4 p-md-5 mx-auto shadow-lg" style="max-width:550px;">
 
+        <!-- HEADER ROW -->
         <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <h4 class="fw-bold mb-0">
-                Book Request Form
+            <h4 class="text-white fw-bold mb-0">
+                Book Request
             </h4>
 
-            <span class="badge bg-dark">
+            <span class="badge bg-primary px-3 py-2">
                 {{ total_books }}/2
             </span>
 
         </div>
 
+        <!-- MESSAGE -->
         {% if message %}
         <div class="alert alert-{{ message_type }}">
             {{ message }}
@@ -40,20 +38,16 @@
         {% endif %}
 
         <form method="POST">
-
             {% csrf_token %}
 
+            <!-- BOOK SELECT -->
             <div class="mb-3">
 
-                <label class="form-label fw-semibold">
-                    Select Book
-                </label>
+                <label class="form-label text-light">Select Book</label>
 
-                <select name="book" class="form-select" style="
-                            border-radius:12px;
-                            padding:10px;
-                            background:#fff;
-                        " required>
+                <select name="book"
+                        class="form-select"
+                        style="border-radius:12px;">
 
                     <option disabled selected>
                         Choose a book...
@@ -69,38 +63,32 @@
 
             </div>
 
-            <button class="btn btn-primary w-100 py-2 fw-bold" style="border-radius:12px;">
-
+            <!-- BUTTON -->
+            <button class="btn btn-primary w-100 py-2 fw-bold"
+                    style="border-radius:12px;">
                 📩 Request Book
-
             </button>
 
         </form>
 
     </div>
 
-    <!-- MY REQUESTS -->
-    <div class="card shadow-lg border-0 p-4 mt-4 mx-auto" style="
-            max-width:750px;
-            border-radius:20px;
-            background:#ffeef5;
-         ">
+    <!-- MY REQUESTS CARD -->
+    <div class="glass-card p-4 mt-4 mx-auto shadow-lg" style="max-width:750px;">
 
-        <h5 class="fw-bold mb-3">
+        <h5 class="text-white fw-bold mb-3">
             My Requests
         </h5>
 
         <div class="table-responsive">
 
-            <table class="table table-hover align-middle">
+            <table class="table table-hover align-middle text-white">
 
-                <thead class="table-dark">
-
+                <thead>
                     <tr>
                         <th>Book</th>
                         <th>Status</th>
                     </tr>
-
                 </thead>
 
                 <tbody>
@@ -109,26 +97,18 @@
 
                     <tr>
 
-                        <td>
-                            {{ req.book.title }}
-                        </td>
+                        <td>{{ req.book.title }}</td>
 
                         <td>
-
                             {% if req.approved %}
-
-                            <span class="badge bg-success">
-                                Approved
-                            </span>
-
+                                <span class="badge bg-success px-3 py-2">
+                                    Approved
+                                </span>
                             {% else %}
-
-                            <span class="badge bg-warning text-dark">
-                                Pending
-                            </span>
-
+                                <span class="badge bg-warning text-dark px-3 py-2">
+                                    Pending
+                                </span>
                             {% endif %}
-
                         </td>
 
                     </tr>
@@ -136,11 +116,9 @@
                     {% empty %}
 
                     <tr>
-
-                        <td colspan="2" class="text-center">
+                        <td colspan="2" class="text-center text-light opacity-75">
                             No Requests Yet
                         </td>
-
                     </tr>
 
                     {% endfor %}

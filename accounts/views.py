@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -207,14 +209,25 @@ def admin_register(request):
 
 # ---------------- LOGIN ----------------
 def login_view(request):
+    
+    print("AUTH =", request.user.is_authenticated)
+    print("USER =", request.user)
 
     if request.user.is_authenticated:
-        return redirect('home')
+
+        if request.user.is_superuser:
+            return redirect('admin_dashboard')
+
+        elif request.user.is_staff:
+            return redirect('staff_dashboard')
+
+        return redirect('student_dashboard')
 
     if request.method == 'POST':
 
         login_input = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
+        remember = request.POST.get('remember', '') == 'on'
 
         if not login_input or not password:
             messages.error(request, "Please enter both username/email and password.")
@@ -256,6 +269,11 @@ def login_view(request):
             return render(request, 'accounts/login.html')
 
         login(request, user)
+
+        if remember:
+            request.session.set_expiry(1209600)
+        else:
+            request.session.set_expiry(0)
 
         # Ensure profile exists with correct role
         profile, _ = Profile.objects.get_or_create(user=user)

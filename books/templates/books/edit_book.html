@@ -6,53 +6,84 @@
 
 <div class="container py-5">
 
-    <div class="card shadow-lg border-0 p-4 mx-auto" style="max-width:600px;border-radius:20px;">
+    <div class="row justify-content-center">
 
-        <h2 class="text-center mb-4">
-            Edit Book
-        </h2>
+        <div class="col-lg-6 col-md-8">
 
-        <form method="POST">
+            <!-- MAIN CARD -->
+            <div class="glass-card p-4 p-md-5 shadow-lg">
 
-            {% csrf_token %}
+                <!-- ICON -->
+                <div class="text-center mb-3">
+                    <i class="fa-solid fa-pen-to-square fa-3x text-primary"></i>
+                </div>
 
-            <div class="mb-3">
+                <h3 class="text-center text-white fw-bold mb-1">
+                    Edit Book
+                </h3>
 
-                <label>Title</label>
+                <p class="text-center text-light opacity-75 small mb-4">
+                    Update book information
+                </p>
 
-                <input type="text" name="title" value="{{ book.title }}" class="form-control">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- TITLE -->
+                    <div class="mb-3">
+                        <label class="text-light mb-1">Title</label>
+                        <input type="text" name="title"
+                               value="{{ book.title }}"
+                               class="form-control"
+                               style="border-radius:12px;">
+                    </div>
+
+                    <!-- AUTHOR -->
+                    <div class="mb-3">
+                        <label class="text-light mb-1">Author</label>
+                        <input type="text" name="author"
+                               value="{{ book.author }}"
+                               class="form-control"
+                               style="border-radius:12px;">
+                    </div>
+
+                    <!-- ISBN -->
+                    <div class="mb-3">
+                        <label class="text-light mb-1">ISBN</label>
+                        <input type="text" name="isbn"
+                               value="{{ book.isbn }}"
+                               class="form-control"
+                               style="border-radius:12px;">
+                    </div>
+
+                    <!-- QUANTITY -->
+                    <div class="mb-3">
+                        <label class="text-light mb-1">Quantity</label>
+                        <input type="number" name="quantity"
+                               value="{{ book.quantity }}"
+                               class="form-control"
+                               style="border-radius:12px;">
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="d-flex gap-2 mt-4">
+
+                        <button class="btn btn-primary w-100">
+                            Update Book
+                        </button>
+
+                        <a href="{% url 'book_list' %}"
+                           class="btn btn-outline-light w-100">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
 
             </div>
 
-            <div class="mb-3">
-
-                <label>Author</label>
-
-                <input type="text" name="author" value="{{ book.author }}" class="form-control">
-
-            </div>
-
-            <div class="mb-3">
-
-                <label>ISBN</label>
-
-                <input type="text" name="isbn" value="{{ book.isbn }}" class="form-control">
-
-            </div>
-
-            <div class="mb-3">
-
-                <label>Quantity</label>
-
-                <input type="number" name="quantity" value="{{ book.quantity }}" class="form-control">
-
-            </div>
-
-            <button class="btn btn-primary w-100">
-                Update Book
-            </button>
-
-        </form>
+        </div>
 
     </div>
 

@@ -1,6 +1,9 @@
+from urllib import request
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.utils import timezone
 
@@ -14,25 +17,36 @@ from .models import (
 
 
 # ---------------- BOOK LIST ----------------
+
 @login_required
 def book_list(request):
 
     query = request.GET.get('q', '').strip()
 
+    books = Book.objects.all().order_by('title')
+
     if query:
-        books = (
-            Book.objects.filter(title__icontains=query) |
-            Book.objects.filter(author__icontains=query) |
-            Book.objects.filter(isbn__icontains=query)
+        books = books.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(isbn__icontains=query)
         ).distinct()
-    else:
-        books = Book.objects.all().order_by('title')
+
+    # PAGINATION
+    paginator = Paginator(books, 5)  # 5 books per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, 'books/book_list.html', {
-        'books': books,
+        'books': page_obj,
         'query': query
     })
 
+# ---------------- BOOK DETAIL ----------------
+@login_required
+def book_detail(request, id):
+    book = get_object_or_404(Book, id=id)
+    return render(request, 'books/book_detail.html', {'book': book})
 
 # ---------------- ADD BOOK ----------------
 @login_required

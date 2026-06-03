@@ -1,144 +1,59 @@
-<!-- templates/accounts/login.html -->
-
 {% extends 'base.html' %}
 
 {% block title %}Login{% endblock %}
 
 {% block content %}
 
-{% include 'includes/dashboard_navbar.html' %}
+{% include 'includes/public_navbar.html' %}
 
-<div class="d-flex justify-content-center align-items-center" style="min-height:80vh;">
+<div class="login-wrapper">
 
-    <div class="card shadow-lg border-0 p-4 mx-auto" style="
-         max-width:520px;
-         width:100%;
-         border-radius:20px;
-         backdrop-filter: blur(10px);
-         background: rgba(255,255,255,0.15);
-         ">
+    <div class="login-card">
 
-        <div class="text-center mb-4">
-
-            <h2 class="fw-bold text-white">
-                Welcome Back
-            </h2>
-
-            <p class="text-light">
-                Login using Username, Email, Roll Number or Staff ID
-            </p>
-
-        </div>
-
-        <!-- Messages -->
-
-        {% if messages %}
-
-        {% for message in messages %}
-
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-
-            {{ message }}
-
-            <button type="button" class="btn-close" data-bs-dismiss="alert">
-            </button>
-
-        </div>
-
-        {% endfor %}
-
-        {% endif %}
-
-        <!-- Login Form -->
+        <h2 class="login-title">Welcome Back</h2>
+        <p class="login-subtitle">Login using Username, Email, Roll No or Staff ID</p>
 
         <form method="POST">
-
             {% csrf_token %}
 
-            <!-- Username / Email -->
-
             <div class="mb-3 input-group">
-
-                <span class="input-group-text">
-                    <i class="fa fa-user"></i>
-                </span>
-
+                <span class="input-group-text"><i class="fa fa-user"></i></span>
                 <input type="text" name="username" class="form-control"
                     placeholder="Username / Email / Roll No / Staff ID" required>
-
             </div>
-
-            <!-- Password -->
 
             <div class="mb-3 input-group">
-
-                <span class="input-group-text">
-                    <i class="fa fa-lock"></i>
-                </span>
-
+                <span class="input-group-text"><i class="fa fa-lock"></i></span>
                 <input type="password" id="loginPass" name="password" class="form-control" placeholder="Password"
                     required>
-
                 <span class="input-group-text" onclick="togglePass('loginPass')" style="cursor:pointer;">
-
-                    👁
-
+                    <i class="fa-solid fa-eye"></i>
                 </span>
-
             </div>
-
-            <!-- Remember -->
 
             <div class="form-check mb-3">
-
-                <input class="form-check-input" type="checkbox" id="remember">
-
-                <label class="form-check-label text-white">
-
-                    Remember Me
-
-                </label>
-
+                <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                <label class="form-check-label text-white">Remember Me</label>
             </div>
 
-            <!-- Button -->
-
-            <button type="submit" class="btn w-100 text-white fw-bold" style="
-            background:linear-gradient(135deg,#667eea,#764ba2);
-            border:none;
-            border-radius:12px;
-            padding:10px;
-        ">
-                Login
+            <button type="submit" class="btn btn-login w-100 text-white">
+                <i class="fa-solid fa-right-to-bracket me-2"></i>Login
             </button>
         </form>
 
-        <!-- Forgot Password -->
-
         <p class="text-center mt-3">
-
             <a href="{% url 'forgot_password' %}" class="text-white text-decoration-none">
-
                 Forgot Password?
-
             </a>
-
         </p>
-
-        <!-- Register -->
 
         <hr class="text-white">
 
         <p class="text-center mb-0 text-white">
-
             Don't have an account?
-
             <a href="{% url 'select_role' %}" class="text-warning text-decoration-none">
-
-                Register
-
+                <i class="fa-solid fa-user-plus me-2"></i>Register
             </a>
-
         </p>
 
     </div>

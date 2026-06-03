@@ -4,26 +4,24 @@
 
 {% block content %}
 
-{% include 'includes/dashboard_navbar.html' %}
+{% include 'includes/public_navbar.html' %}
 
-<div class="d-flex justify-content-center align-items-center" style="min-height:90vh;">
+<div class="login-wrapper">
 
-    <div class="card shadow-lg border-0 p-4 mx-auto" style="
-         max-width:520px;
-         width:100%;
-         border-radius:20px;
-         backdrop-filter: blur(10px);
-         background: rgba(255,255,255,0.15);
-         ">
+    <div class="login-card">
 
+        <!-- HEADER -->
         <div class="text-center mb-4">
-            <h2 class="fw-bold text-white">
+
+            <h2 class="login-title">
+                <i class="fa-solid fa-user-shield text-danger me-2"></i>
                 Admin Registration
             </h2>
 
-            <p class="text-light">
-                Create admin account
+            <p class="login-subtitle">
+                Create administrator account
             </p>
+
         </div>
 
         <form method="POST">
@@ -32,86 +30,85 @@
             <!-- Username -->
             <div class="mb-3 input-group">
                 <span class="input-group-text">
-                    <i class="fa fa-user"></i>
+                    <i class="fa-solid fa-user"></i>
                 </span>
-
                 <input type="text" name="username" class="form-control" placeholder="Enter Username" required>
             </div>
 
             <!-- Email -->
             <div class="mb-3 input-group">
                 <span class="input-group-text">
-                    <i class="fa fa-envelope"></i>
+                    <i class="fa-solid fa-envelope"></i>
                 </span>
-
                 <input type="email" name="email" class="form-control" placeholder="Enter Email" required>
             </div>
 
             <!-- Admin Code -->
             <div class="mb-3 input-group">
                 <span class="input-group-text">
-                    <i class="fa fa-key"></i>
+                    <i class="fa-solid fa-key"></i>
                 </span>
 
-                <input type="password" name="admin_code" class="form-control" placeholder="Enter Admin Secret Code"
-                    required>
+                <input type="password" id="adminCode" name="admin_code"
+                       class="form-control" placeholder="Admin Secret Code" required>
+
+                <span class="input-group-text" onclick="togglePass('adminCode')" style="cursor:pointer;">
+                    <i class="fa-solid fa-eye"></i>
+                </span>
+            </div>
+
+            <div class="text-center mb-3">
+                <small class="text-light opacity-75">
+                    Don't have Admin Code?
+                    <a href="{% url 'contact' %}" class="text-warning text-decoration-none">
+                        Contact Owner
+                    </a>
+                </small>
             </div>
 
             <!-- Password -->
             <div class="mb-3 input-group">
-
                 <span class="input-group-text">
-                    <i class="fa fa-lock"></i>
+                    <i class="fa-solid fa-lock"></i>
                 </span>
 
-                <input type="password" id="adminPass" name="password" class="form-control" placeholder="Enter Password"
-                    required>
+                <input type="password" id="adminPass" name="password"
+                       class="form-control" placeholder="Enter Password" required>
 
                 <span class="input-group-text" onclick="togglePass('adminPass')" style="cursor:pointer;">
-
-                    👁
-
+                    <i class="fa-solid fa-eye"></i>
                 </span>
-
             </div>
 
             <!-- Confirm Password -->
-
             <div class="mb-3 input-group">
-
                 <span class="input-group-text">
-                    <i class="fa fa-lock"></i>
+                    <i class="fa-solid fa-lock"></i>
                 </span>
 
-                <input type="password" id="adminConfirmPass" name="confirm_password" class="form-control"
-                    placeholder="Confirm Password" required>
+                <input type="password" id="adminConfirmPass" name="confirm_password"
+                       class="form-control" placeholder="Confirm Password" required>
 
+                <span class="input-group-text" onclick="togglePass('adminConfirmPass')" style="cursor:pointer;">
+                    <i class="fa-solid fa-eye"></i>
+                </span>
             </div>
 
-            <!-- Terms -->
-
+            <!-- TERMS -->
             <div class="form-check mb-3">
-
                 <input class="form-check-input" type="checkbox" required>
-
                 <label class="form-check-label text-white">
-
                     I agree to the
-
                     <a href="{% url 'terms_conditions' %}" class="text-warning" target="_blank">
-
                         Terms & Conditions
-
                     </a>
-
                 </label>
-
             </div>
 
-            <!-- Button -->
-
-            <button class="btn btn-danger w-100 py-2">
-                Register
+            <!-- BUTTON -->
+            <button type="submit" class="btn btn-warning w-100 fw-bold">
+                <i class="fa-solid fa-user-shield me-2"></i>
+                Register Admin
             </button>
 
         </form>
@@ -119,15 +116,11 @@
         <hr class="text-white">
 
         <p class="text-center mb-0 text-white">
-
             Already have an account?
-
-            <a href="{% url 'login' %}" class="text-warning">
-
+            <a href="{% url 'login' %}" class="text-warning text-decoration-none fw-semibold">
+                <i class="fa-solid fa-right-to-bracket me-1"></i>
                 Login
-
             </a>
-
         </p>
 
     </div>

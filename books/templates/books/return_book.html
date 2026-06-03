@@ -6,42 +6,41 @@
 
 <div class="container py-5">
 
-    <!-- HEADING -->
+    <!-- HEADER -->
     <div class="text-center mb-4">
         <h2 class="text-white fw-bold">🔄 Return Books</h2>
+        <p class="text-light opacity-75 small">
+            Manage issued and returned books
+        </p>
     </div>
 
-    <!-- CARD -->
-    <div class="card shadow-lg border-0 p-4" style="border-radius:20px;">
+    <!-- MAIN CARD -->
+    <div class="glass-card p-4">
 
         <!-- SEARCH -->
-        <div class="position-relative mb-3">
+        <div class="position-relative mb-4">
 
-            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+            <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-light opacity-75">
                 🔍
             </span>
 
-            <input type="text" id="returnSearch" class="form-control ps-5"
-                placeholder="Search student, book or status..." style="
-                        background: rgba(255,255,255,0.9);
-                        border: 1px solid rgba(0,0,0,0.1);
-                        border-radius: 12px;
-                        color: #000;
-                        height: 42px;
-                   ">
+            <input type="text" id="returnSearch"
+                   class="form-control ps-5"
+                   placeholder="Search student, book or status..."
+                   style="border-radius:12px;">
         </div>
 
         <!-- TABLE -->
         <div class="table-responsive">
 
-            <table class="table table-hover align-middle" id="returnTable">
+            <table class="table table-hover align-middle text-white" id="returnTable">
 
-                <thead class="table-dark">
+                <thead>
                     <tr>
                         <th>Student</th>
                         <th>Book</th>
-                        <th>Issue Date</th>
-                        <th>Return Date</th>
+                        <th>Issue</th>
+                        <th>Return</th>
                         <th>Fine</th>
                         <th>Status</th>
 
@@ -56,41 +55,62 @@
                     {% for issue in issued_books %}
 
                     <tr>
+
                         <td>{{ issue.student.username }}</td>
+
                         <td>{{ issue.book.title }}</td>
+
                         <td>{{ issue.issue_date }}</td>
+
                         <td>{{ issue.return_date }}</td>
 
+                        <!-- FINE -->
                         <td>
                             {% if issue.fine > 0 %}
-                            <span class="badge bg-danger">₹{{ issue.fine }}</span>
+                                <span class="badge bg-danger px-3 py-2">
+                                    ₹{{ issue.fine }}
+                                </span>
                             {% else %}
-                            <span class="badge bg-success">No Fine</span>
+                                <span class="badge bg-success px-3 py-2">
+                                    No Fine
+                                </span>
                             {% endif %}
                         </td>
 
+                        <!-- STATUS -->
                         <td>
                             {% if issue.returned %}
-                            <span class="badge bg-success">Returned</span>
+                                <span class="badge bg-success px-3 py-2">Returned</span>
+
                             {% elif issue.return_date < today %}
-                            <!-- FIX: Overdue highlight using 'today' context var -->
-                            <span class="badge bg-danger">Overdue</span>
+                                <span class="badge bg-danger px-3 py-2">Overdue</span>
+
                             {% else %}
-                            <span class="badge bg-warning text-dark">Issued</span>
+                                <span class="badge bg-warning text-dark px-3 py-2">
+                                    Issued
+                                </span>
                             {% endif %}
                         </td>
 
+                        <!-- ACTION -->
                         {% if request.user.is_superuser or request.user.is_staff %}
-                        <td>
+                        <td class="text-nowrap">
+
                             {% if not issue.returned %}
-                            <a href="{% url 'return_book_action' issue.id %}" class="btn btn-danger btn-sm">
+
+                            <a href="{% url 'return_book_action' issue.id %}"
+                               class="btn btn-sm btn-danger">
                                 Return
                             </a>
+
                             {% else %}
-                            <button class="btn btn-success btn-sm" disabled>
-                                Returned
+
+                            <button class="btn btn-sm btn-secondary" disabled>
+                                Done
                             </button>
+
                             {% endif %}
+
                         </td>
                         {% endif %}
 
@@ -99,8 +119,8 @@
                     {% empty %}
 
                     <tr>
-                        <td colspan="7" class="text-center">
-                            No Issued Books
+                        <td colspan="7" class="text-center text-light opacity-75">
+                            No Issued Books Found
                         </td>
                     </tr>
 
@@ -118,14 +138,13 @@
 
 <!-- SEARCH SCRIPT -->
 <script>
-    document.getElementById("returnSearch").addEventListener("keyup", function () {
-        let value = this.value.toLowerCase();
+document.getElementById("returnSearch").addEventListener("keyup", function () {
+    let value = this.value.toLowerCase();
 
-        document.querySelectorAll("#returnTable tbody tr").forEach(row => {
-            row.style.display =
-                row.innerText.toLowerCase().includes(value) ? "" : "none";
-        });
+    document.querySelectorAll("#returnTable tbody tr").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
     });
+});
 </script>
 
 {% endblock %}

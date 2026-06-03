@@ -5,30 +5,117 @@
 
 {% block content %}
 
-{% include 'includes/dashboard_navbar.html' %}
+{% include 'includes/public_navbar.html' %}
 
-<div class="container mt-5" style="min-height:40vh;">
+<div class="container py-5" style="min-height:70vh;">
 
-    <h2 class="text-center mb-5 text-white">Select Role</h2>
+    <!-- HEADER -->
 
-    <div class="row justify-content-center g-3">
+    <div class="text-center mb-5">
 
-        <div class="col-md-3">
-            <a href="{% url 'student_register' %}" class="btn btn-primary w-100 p-4">
-                Student Register
+        <span class="hero-badge">
+            Registration Portal
+        </span>
+
+        <h2 class="fw-bold text-warning mt-3">
+            Choose Your Role
+        </h2>
+
+        <p class="text-light opacity-75">
+            Select the account type you want to create
+        </p>
+
+    </div>
+
+    <!-- ROLE CARDS -->
+
+    <div class="row justify-content-center g-4">
+
+        <!-- STUDENT -->
+
+        <div class="col-lg-3 col-md-4">
+
+            <a href="{% url 'student_register' %}"
+               class="text-decoration-none">
+
+                <div class="glass-card text-center p-4 h-100">
+
+                    <div class="mb-3">
+
+                        <i class="fa-solid fa-user-graduate fa-3x text-success"></i>
+
+                    </div>
+
+                    <h5 class="fw-bold text-white">
+                        Student
+                    </h5>
+
+                    <p class="text-light opacity-75 small mb-0">
+                        Register as a student and access library resources.
+                    </p>
+
+                </div>
+
             </a>
+
         </div>
 
-        <div class="col-md-3">
-            <a href="{% url 'staff_register' %}" class="btn btn-success w-100 p-4">
-                Staff Register
+        <!-- STAFF -->
+
+        <div class="col-lg-3 col-md-4">
+
+            <a href="{% url 'staff_register' %}"
+               class="text-decoration-none">
+
+                <div class="glass-card text-center p-4 h-100">
+
+                    <div class="mb-3">
+
+                        <i class="fa-solid fa-chalkboard-user fa-3x text-primary"></i>
+
+                    </div>
+
+                    <h5 class="fw-bold text-white">
+                        Staff
+                    </h5>
+
+                    <p class="text-light opacity-75 small mb-0">
+                        Manage books, requests and library operations.
+                    </p>
+
+                </div>
+
             </a>
+
         </div>
 
-        <div class="col-md-3">
-            <a href="{% url 'admin_register' %}" class="btn btn-warning w-100 p-4">
-                Admin Register
+        <!-- ADMIN -->
+
+        <div class="col-lg-3 col-md-4">
+
+            <a href="{% url 'admin_register' %}"
+               class="text-decoration-none">
+
+                <div class="glass-card text-center p-4 h-100">
+
+                    <div class="mb-3">
+
+                        <i class="fa-solid fa-user-shield fa-3x text-warning"></i>
+
+                    </div>
+
+                    <h5 class="fw-bold text-white">
+                        Admin
+                    </h5>
+
+                    <p class="text-light opacity-75 small mb-0">
+                        Full system control and user management access.
+                    </p>
+
+                </div>
+
             </a>
+
         </div>
 
     </div>

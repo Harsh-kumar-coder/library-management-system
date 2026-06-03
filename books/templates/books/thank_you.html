@@ -6,31 +6,63 @@
 
 {% include 'includes/public_navbar.html' %}
 
-<div class="container text-center text-white"
-    style="min-height:85vh;display:flex;align-items:center;justify-content:center;">
+<div class="container d-flex align-items-center justify-content-center"
+     style="min-height:85vh;">
 
-    <div class="p-5 rounded" style="background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);">
+    <!-- CARD -->
+    <div class="glass-card text-center p-5 shadow-lg"
+         style="max-width:520px;border-radius:22px;">
 
-        <h1 class="mb-3">🙏 Thank You!</h1>
+        <!-- ICON -->
+        <div class="mb-3">
+            <div style="
+                width:90px;
+                height:90px;
+                margin:auto;
+                border-radius:50%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:rgba(255,255,255,0.1);
+                backdrop-filter:blur(10px);
+            ">
+                <i class="fa-solid fa-circle-check fa-3x text-success"></i>
+            </div>
+        </div>
 
-        <p class="lead">
-            Your donation helps us grow the library 📚
+        <!-- TITLE -->
+        <h2 class="fw-bold text-white mb-2">
+            Thank You!
+        </h2>
+
+        <p class="text-light opacity-75 mb-4">
+            Your donation has been successfully received 💖<br>
+            It helps us improve the library experience 📚
         </p>
 
-        <a href="/books/donate/" class="btn btn-warning mt-3">
-            Donate Again
-        </a>
+        <!-- HIGHLIGHT BOX -->
+        <div class="glass-card p-3 mb-4">
+            <small class="text-light opacity-75">Status</small>
+            <div class="fw-bold text-success">
+                Donation Successful
+            </div>
+        </div>
 
-        <br><br>
+        <!-- BUTTONS -->
+        <div class="d-grid gap-2">
 
-        <a href="{% url 'home' %}" class="text-white">
-            Back to Home
-        </a>
+            <a href="{% url 'donate' %}" class="btn btn-warning fw-bold py-2">
+                💛 Donate Again
+            </a>
+
+            <a href="{% url 'home' %}" class="btn btn-outline-light py-2">
+                ← Back to Home
+            </a>
+
+        </div>
 
     </div>
 
 </div>
-
-{% include 'includes/footer.html' %}
 
 {% endblock %}

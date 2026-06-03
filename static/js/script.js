@@ -1,31 +1,34 @@
 // Auto Hide Toast Messages
 
-setTimeout(() => {
+document.addEventListener("DOMContentLoaded", function () {
 
-    let alerts = document.querySelectorAll('.popup-alert');
+    document.querySelectorAll(".popup-alert").forEach(function (toastEl) {
 
-    alerts.forEach(alert => {
+        const toast = new bootstrap.Toast(toastEl, {
+            delay: 2000,
+            autohide: true
+        });
 
-        alert.classList.remove('show');
+        toast.show();
 
     });
 
-}, 3000);
+});
 
 
 // Toggle Password
 
-function togglePass(id){
+function togglePass(id) {
 
     let input = document.getElementById(id);
 
-    if(input.type === "password"){
+    if (input.type === "password") {
 
         input.type = "text";
 
     }
 
-    else{
+    else {
 
         input.type = "password";
 
@@ -36,19 +39,19 @@ function togglePass(id){
 
 // Toggle Admin Code
 
-function toggleAdminCode(){
+function toggleAdminCode() {
 
     let role = document.getElementById('role').value;
 
     let adminBox = document.getElementById('adminCodeBox');
 
-    if(role === "admin"){
+    if (role === "admin") {
 
         adminBox.style.display = "flex";
 
     }
 
-    else{
+    else {
 
         adminBox.style.display = "none";
 
@@ -59,13 +62,13 @@ function toggleAdminCode(){
 
 // Professional Logout Confirm
 
-function showLogoutConfirm(){
+function showLogoutConfirm() {
 
     let confirmLogout = confirm(
         "Do you really want to logout?"
     );
 
-    if(confirmLogout){
+    if (confirmLogout) {
 
         document.getElementById('logoutForm').submit();
 
