@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.utils import timezone
+from django.db.models import Q 
 
 from .models import (
     Book,
@@ -130,8 +131,7 @@ def edit_book(request, id):
         if quantity < issued_count:
             messages.error(
                 request,
-                f"Quantity {issued_count} cannot be less than the number of currently issued books "
-                f"(currently {issued_count} books are issued)."
+                f"Quantity cannot be set to {quantity} — {issued_count} copies are currently issued."
             )
             return render(request, 'books/edit_book.html', {'book': book})
 
