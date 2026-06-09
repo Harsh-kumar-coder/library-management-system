@@ -139,8 +139,7 @@
                                     {% else %}Student{% endif %}
                                 </td>
                                 <td>
-                                    <a href="{% url 'approve_user' user.id %}"
-                                       class="btn btn-success btn-sm">
+                                    <a href="{% url 'approve_user' user.id %}" class="btn btn-success btn-sm">
                                         Approve
                                     </a>
                                 </td>
@@ -244,19 +243,19 @@
 
 <!-- SEARCH SCRIPT -->
 <script>
-document.getElementById("userSearch").addEventListener("keyup", function () {
-    let value = this.value.toLowerCase();
-    document.querySelectorAll("#usersTable tbody tr").forEach(row => {
-        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    document.getElementById("userSearch").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        document.querySelectorAll("#usersTable tbody tr").forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+        });
     });
-});
 
-document.getElementById("bookSearch").addEventListener("keyup", function () {
-    let value = this.value.toLowerCase();
-    document.querySelectorAll("#booksTable tbody tr").forEach(row => {
-        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    document.getElementById("bookSearch").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        document.querySelectorAll("#booksTable tbody tr").forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+        });
     });
-});
 </script>
 
 {% endblock %}
